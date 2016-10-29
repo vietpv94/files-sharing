@@ -7,18 +7,16 @@
         span.icon-bar
         span.icon-bar
       a.navbar-brand(href='/')
-        i.fa.fa-cube
+        i.fa.fa-github-alt
         | Files Sharing
     .collapse.navbar-collapse
       ul.nav.navbar-nav
         li(class=(title == 'Home') ? 'active' : undefined)
           a(href='/') Home
-        li(class=(title == 'API Examples') ? 'active' : undefined)
-          a(href='/api') API Examples
-        li(class=(title == 'Contact') ? 'active' : undefined)
-          a(href='/contact') Contact
-        li
-          a(href='/status') Status
+        li(class=(title == 'Files Uploaded') ? 'active' : undefined)
+          a(href='/api') Files Uploaded
+        li(class=(title == 'About Team') ? 'active' : undefined)
+          a(href='/about') About Team
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=(title == 'Login') ? 'active' : undefined)

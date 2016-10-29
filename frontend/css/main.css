@@ -3762,7 +3762,7 @@ tbody.collapse.in {
 
 .navbar-brand {
   float: left;
-  padding: 15px 15px;
+  padding: 10px 15px !important;
   font-size: 18px;
   line-height: 20px;
   height: 50px; }
@@ -8936,4 +8936,14 @@ textarea {
   box-shadow: 0 0 5px #ccc, inset 0 0 0 #000; }
 
 .fa {
-  margin-right: 6px; }
+  margin-right: 6px;
+  font-size: 25px; }
+
+.card {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+  /* 5px rounded corners */ }
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); }

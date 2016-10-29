@@ -4,15 +4,19 @@ html
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    meta(name='theme-color' content='#4DA5F4')
+    meta(name='theme-color' content='#0064be')
     meta(name='csrf-token', content=_csrf)
     title #{title} - Files Sharing System
-    link(rel='shortcut icon', href='/favicon.png')
+    link(rel='shortcut icon', href='/favicon.ico')
     link(rel='stylesheet', href='/css/main.css')
     link(rel="stylesheet", href="/components/bootstrap/dist/css/bootstrap.min.css")
     script(src='/components/bootstrap/dist/js/bootstrap.min.js')
+    script(src='/components/jquery/dist/jquery.min.js')
+    script(src='/components/angular-component/dist/angular-component.min.js')
+    script(src='/components/angular/angular.min.js')
+    script(src='/components/angular-ui-router/release/angular-ui-router.min.js')
 
-  body
+  body(ng-app="dsp.filesSharing")
     include partials/header
 
     .container

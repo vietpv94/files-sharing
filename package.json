@@ -6,7 +6,6 @@
     "url": "https://github.com/portgas-d-ace/files-sharing.git"
   },
   "scripts": {
-    "prestart": "gulp",
     "start": "node app.js",
     "test": "mocha --reporter spec --timeout 5000"
   },

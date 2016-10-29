@@ -66,12 +66,12 @@ gulp.task('main-bower-files', function() {
         .pipe(reload({stream: true}));
 });
 
-gulp.task('server', function() {
-  var server = child.spawn('node', ['app.js']);
-  var log = fs.createWriteStream('server.log', {flags: 'a'});
-  server.stdout.pipe(log);
-  server.stderr.pipe(log);
-});
+// gulp.task('server', function() {
+//   var server = child.spawn('node', ['app.js']);
+//   var log = fs.createWriteStream('server.log', {flags: 'a'});
+//   server.stdout.pipe(log);
+//   server.stderr.pipe(log);
+// });
 
  // Watch for changes in files
 gulp.task('watch', function() {
@@ -85,4 +85,4 @@ gulp.task('watch', function() {
   reload();
  });
  // Default Task
-gulp.task('default', ['scripts', 'sass', 'images', 'watch', 'main-bower-files', 'server']);
+gulp.task('default', ['scripts', 'sass', 'images', 'watch', 'main-bower-files']);

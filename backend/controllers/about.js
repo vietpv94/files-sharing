@@ -8,20 +8,20 @@ const transporter = nodemailer.createTransport({
 });
 
 /**
- * GET /contact
- * Contact form page.
+ * GET /about
+ * about form page.
  */
-exports.getContact = (req, res) => {
-  res.render('contact', {
-    title: 'Contact'
+exports.getAbout = (req, res) => {
+  res.render('about', {
+    title: 'About Team'
   });
 };
 
 /**
- * POST /contact
- * Send a contact form via Nodemailer.
+ * POST / about
+ * Send a about form via Nodemailer.
  */
-exports.postContact = (req, res) => {
+exports.postAbout = (req, res) => {
   req.assert('name', 'Name cannot be blank').notEmpty();
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('message', 'Message cannot be blank').notEmpty();
@@ -30,22 +30,22 @@ exports.postContact = (req, res) => {
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/contact');
+    return res.redirect('/about');
   }
 
   const mailOptions = {
     to: 'your@email.com',
     from: `${req.body.name} <${req.body.email}>`,
-    subject: 'Contact Form | Hackathon Starter',
+    subject: 'About Team | Files Sharing',
     text: req.body.message
   };
 
   transporter.sendMail(mailOptions, (err) => {
     if (err) {
       req.flash('errors', { msg: err.message });
-      return res.redirect('/contact');
+      return res.redirect('/about');
     }
     req.flash('success', { msg: 'Email has been sent successfully!' });
-    res.redirect('/contact');
+    res.redirect('/about');
   });
 };

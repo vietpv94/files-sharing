@@ -32,7 +32,7 @@ dotenv.load({ path: '.env.example' });
 const homeController = require('./backend/controllers/home');
 const userController = require('./backend/controllers/user');
 const apiController = require('./backend/controllers/api');
-const contactController = require('./backend/controllers/contact');
+const aboutController = require('./backend/controllers/about');
 
 /**
  * API keys and Passport configuration.
@@ -125,8 +125,8 @@ app.get('/reset/:token', userController.getReset);
 app.post('/reset/:token', userController.postReset);
 app.get('/signup', userController.getSignup);
 app.post('/signup', userController.postSignup);
-app.get('/contact', contactController.getContact);
-app.post('/contact', contactController.postContact);
+app.get('/about', aboutController.getAbout);
+app.post('/about', aboutController.postAbout);
 app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);

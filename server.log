@@ -6,7 +6,7 @@
 [0mGET /fonts/fontawesome-webfont.woff?v=4.6.3 [33m404 [0m3.341 ms - 51[0m
 [0mGET /fonts/fontawesome-webfont.ttf?v=4.6.3 [33m404 [0m7.365 ms - 50[0m
 [0mGET /favicon.png [33m404 [0m2.562 ms - 24[0m
-[0mGET /contact [32m200 [0m174.429 ms - -[0m
+[0mGET /about [32m200 [0m174.429 ms - -[0m
 [0mGET /css/main.css [33m404 [0m9.152 ms - 25[0m
 [0mGET /css/main.css [33m404 [0m8.932 ms - 25[0m
 ✓ Express server listening on port 3000 in development mode.
@@ -63,3 +63,41 @@
 ✓ Express server listening on port 3000 in development mode.
 ✓ MongoDB connection established!
 [0mGET / [32m200 [0m546.989 ms - -[0m
+[0mGET /login [32m200 [0m316.764 ms - -[0m
+[0mGET /auth/google [36m302 [0m12.056 ms - 0[0m
+[0mGET /auth/google/callback?code=4/7SY46td_mBYios9dFNeJbyPOEYFDsCsKwKOHnKsXG50 [36m302 [0m710.861 ms - 46[0m
+[0mGET / [32m200 [0m178.775 ms - -[0m
+events.js:160
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE :::3000
+    at Object.exports._errnoException (util.js:1026:11)
+    at exports._exceptionWithHostPort (util.js:1049:20)
+    at Server._listen2 (net.js:1253:14)
+    at listen (net.js:1289:10)
+    at Server.listen (net.js:1385:5)
+    at EventEmitter.listen (/home/vietpham/schoolProjects/files-sharing/node_modules/express/lib/application.js:617:24)
+    at Object.<anonymous> (/home/vietpham/schoolProjects/files-sharing/app.js:225:5)
+    at Module._compile (module.js:556:32)
+    at Object.Module._extensions..js (module.js:565:10)
+    at Module.load (module.js:473:32)
+    at tryModuleLoad (module.js:432:12)
+    at Function.Module._load (module.js:424:3)
+    at Module.runMain (module.js:590:10)
+    at run (bootstrap_node.js:394:7)
+    at startup (bootstrap_node.js:149:9)
+    at bootstrap_node.js:509:3
+✓ Express server listening on port 3000 in development mode.
+✓ MongoDB connection established!
+[0mGET / [32m200 [0m620.321 ms - -[0m
+[0mGET /login [32m200 [0m413.903 ms - -[0m
+[0mGET /auth/google [36m302 [0m14.031 ms - 0[0m
+[0mGET /auth/google/callback?code=4/rT6xZ9c8j40uJtqzxqLCqzS257Akg0ZpkDxQHFvgOoQ [36m302 [0m895.300 ms - 46[0m
+[0mGET / [32m200 [0m326.861 ms - -[0m
+[0mGET /api [32m200 [0m444.665 ms - -[0m
+[0mGET /about [32m200 [0m133.519 ms - -[0m
+[0mGET /favicon.ico [33m404 [0m6.101 ms - 24[0m
+[0mGET / [32m200 [0m100.288 ms - -[0m
+[0mGET / [32m200 [0m100.781 ms - -[0m
+[0mGET / [32m200 [0m300.908 ms - -[0m

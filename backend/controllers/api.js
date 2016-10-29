@@ -145,7 +145,7 @@ exports.getScraping = (req, res, next) => {
 exports.getGithub = (req, res, next) => {
   const token = req.user.tokens.find(token => token.kind === 'github');
   const github = new GitHub();
-  github.repos.get({ user: 'sahat', repo: 'hackathon-starter' }, (err, repo) => {
+  github.repos.get({ user: 'sahat', repo: 'files-sharing' }, (err, repo) => {
     if (err) { return next(err); }
     res.render('api/github', {
       title: 'GitHub API',
@@ -427,8 +427,8 @@ exports.getClockwork = (req, res) => {
 exports.postClockwork = (req, res, next) => {
   const message = {
     To: req.body.telephone,
-    From: 'Hackathon',
-    Content: 'Hello from the Hackathon Starter'
+    From: 'files-sharing',
+    Content: 'Hello from Bach Khoa University'
   };
   clockwork.sendSms(message, (err, responseData) => {
     if (err) { return next(err.errDesc); }
@@ -515,7 +515,7 @@ exports.getPayPal = (req, res, next) => {
       cancel_url: process.env.PAYPAL_CANCEL_URL
     },
     transactions: [{
-      description: 'Hackathon Starter',
+      description: 'Files Sharing',
       amount: {
         currency: 'USD',
         total: '1.99'
@@ -582,7 +582,7 @@ exports.getLob = (req, res, next) => {
  * GET /api/upload
  * File Upload API example.
  */
- 
+
 exports.getFileUpload = (req, res, next) => {
   res.render('api/upload', {
     title: 'File Upload'
