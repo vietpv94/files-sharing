@@ -3,7 +3,7 @@
   "version": "4.2.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sahat/hackathon-starter.git"
+    "url": "https://github.com/portgas-d-ace/files-sharing.git"
   },
   "scripts": {
     "prestart": "gulp",
