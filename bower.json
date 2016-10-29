@@ -1,0 +1,22 @@
+{
+  "name": "files sharing system",
+  "description": "distributed system software",
+  "main": "index.js",
+  "authors": [
+    "vietpham"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "frontend/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}

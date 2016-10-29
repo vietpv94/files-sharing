@@ -1,0 +1,65 @@
+✓ Express server listening on port 3000 in development mode.
+✓ MongoDB connection established!
+[0mGET / [32m200 [0m4683.438 ms - -[0m
+[0mGET / [32m200 [0m222.470 ms - -[0m
+[0mGET /fonts/fontawesome-webfont.woff2?v=4.6.3 [33m404 [0m11.424 ms - 52[0m
+[0mGET /fonts/fontawesome-webfont.woff?v=4.6.3 [33m404 [0m3.341 ms - 51[0m
+[0mGET /fonts/fontawesome-webfont.ttf?v=4.6.3 [33m404 [0m7.365 ms - 50[0m
+[0mGET /favicon.png [33m404 [0m2.562 ms - 24[0m
+[0mGET /contact [32m200 [0m174.429 ms - -[0m
+[0mGET /css/main.css [33m404 [0m9.152 ms - 25[0m
+[0mGET /css/main.css [33m404 [0m8.932 ms - 25[0m
+✓ Express server listening on port 3000 in development mode.
+✓ MongoDB connection established!
+[0mGET / [32m200 [0m569.326 ms - -[0m
+[0mGET /fonts/fontawesome-webfont.woff2?v=4.6.3 [33m404 [0m7.813 ms - 52[0m
+[0mGET /fonts/fontawesome-webfont.woff?v=4.6.3 [33m404 [0m16.316 ms - 51[0m
+[0mGET /fonts/fontawesome-webfont.ttf?v=4.6.3 [33m404 [0m4.264 ms - 50[0m
+[0mGET /css/main.css [33m404 [0m3.225 ms - 25[0m
+[0mGET / [32m200 [0m278.330 ms - -[0m
+[0mGET /components/bootstrap/dist/css/bootstrap.min.css [33m404 [0m10.424 ms - 60[0m
+[0mGET /css/main.css [33m404 [0m9.005 ms - 25[0m
+[0mGET /components/bootstrap/dist/js/bootstrap.min.js [33m404 [0m8.640 ms - 58[0m
+[0mGET / [32m200 [0m119.623 ms - -[0m
+[0mGET /components/bootstrap/dist/js/bootstrap.min.js [33m404 [0m10.912 ms - 58[0m
+[0mGET /components/bootstrap/dist/css/bootstrap.min.css [33m404 [0m13.300 ms - 60[0m
+[0mGET /css/main.css [33m404 [0m6.511 ms - 25[0m
+[0mGET / [32m200 [0m114.604 ms - -[0m
+[0mGET /css/main.css [33m404 [0m12.093 ms - 25[0m
+[0mGET /components/bootstrap/dist/js/bootstrap.min.js [33m404 [0m8.035 ms - 58[0m
+[0mGET /components/bootstrap/dist/css/bootstrap.min.css [33m404 [0m10.491 ms - 60[0m
+✓ Express server listening on port 3000 in development mode.
+✓ MongoDB connection established!
+[0mGET / [32m200 [0m583.955 ms - -[0m
+[0mGET /components/bootstrap/dist/js/bootstrap.min.js [33m404 [0m17.434 ms - 58[0m
+[0mGET /components/bootstrap/dist/css/bootstrap.min.css [33m404 [0m32.969 ms - 60[0m
+[0mGET /fonts/fontawesome-webfont.woff2?v=4.6.3 [33m404 [0m3.947 ms - 52[0m
+[0mGET /fonts/fontawesome-webfont.woff?v=4.6.3 [33m404 [0m4.882 ms - 51[0m
+[0mGET /fonts/fontawesome-webfont.ttf?v=4.6.3 [33m404 [0m2.871 ms - 50[0m
+[0mGET /api [32m200 [0m256.332 ms - -[0m
+[0mGET /components/bootstrap/dist/css/bootstrap.min.css [33m404 [0m20.548 ms - 60[0m
+[0mGET /components/bootstrap/dist/js/bootstrap.min.js [33m404 [0m20.865 ms - 58[0m
+[0mGET /css/main.css [33m404 [0m9.513 ms - 25[0m
+[0mGET /css/main.css [33m404 [0m2.518 ms - 25[0m
+[0mGET / [32m200 [0m285.587 ms - -[0m
+[0mGET /css/main.css [33m404 [0m4.289 ms - 25[0m
+[0mGET /components/bootstrap/dist/css/bootstrap.min.css [33m404 [0m6.544 ms - 60[0m
+[0mGET /components/bootstrap/dist/js/bootstrap.min.js [33m404 [0m5.290 ms - 58[0m
+[0mGET /favicon.png [33m404 [0m3.419 ms - 24[0m
+[0mGET / [32m200 [0m133.710 ms - -[0m
+[0mGET /components/bootstrap/dist/css/bootstrap.min.css [33m404 [0m11.996 ms - 60[0m
+[0mGET /css/main.css [33m404 [0m11.423 ms - 25[0m
+[0mGET /components/bootstrap/dist/js/bootstrap.min.js [33m404 [0m10.945 ms - 58[0m
+[0mGET /favicon.ico [33m404 [0m4.483 ms - 24[0m
+[0mGET /favicon.ico [33m404 [0m3.101 ms - 24[0m
+[0mGET /signup [32m200 [0m260.542 ms - -[0m
+[0mGET /components/bootstrap/dist/css/bootstrap.min.css [33m404 [0m8.849 ms - 60[0m
+[0mGET /css/main.css [33m404 [0m7.375 ms - 25[0m
+[0mGET /components/bootstrap/dist/js/bootstrap.min.js [33m404 [0m6.538 ms - 58[0m
+✓ Express server listening on port 3000 in development mode.
+✓ MongoDB connection established!
+[0mGET /login [32m200 [0m638.863 ms - -[0m
+[0mGET / [32m200 [0m205.802 ms - -[0m
+✓ Express server listening on port 3000 in development mode.
+✓ MongoDB connection established!
+[0mGET / [32m200 [0m546.989 ms - -[0m
