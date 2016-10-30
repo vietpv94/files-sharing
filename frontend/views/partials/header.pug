@@ -12,11 +12,11 @@
     .collapse.navbar-collapse
       ul.nav.navbar-nav
         li(class=(title == 'Home') ? 'active' : undefined)
-          a(href='/') Home
+          a(href="/", ui-sref-active="selected") Home
         li(class=(title == 'Files Uploaded') ? 'active' : undefined)
-          a(href='/api') Files Uploaded
+          a(href="/my-files", ui-sref-active="selected") Files Uploaded
         li(class=(title == 'About Team') ? 'active' : undefined)
-          a(href='/about') About Team
+          a(href="/about", ui-sref-active="selected") About Team
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=(title == 'Login') ? 'active' : undefined)
