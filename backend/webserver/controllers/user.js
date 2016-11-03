@@ -2,7 +2,7 @@ const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
-const User = require('../../core/models/User');
+const User = require('../../core/db/mongo/models/User');
 /**
  * GET /login
  * GET /login

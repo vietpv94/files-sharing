@@ -67,7 +67,7 @@ gulp.task('main-bower-files', function() {
 });
 
 // gulp.task('server', function() {
-//   var server = child.spawn('node', ['app.js']);
+//   var server = child.spawn('node', ['server.js']);
 //   var log = fs.createWriteStream('server.log', {flags: 'a'});
 //   server.stdout.pipe(log);
 //   server.stderr.pipe(log);

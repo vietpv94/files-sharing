@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../db/mongo/models/User');
 /**
  * Authenticate a user with Google
  */

@@ -8,5 +8,4 @@ module.exports = function (router) {
   router.post('/account/password', authMiddleware.isAuthenticated, userController.postUpdatePassword);
   router.post('/account/delete', authMiddleware.isAuthenticated, userController.postDeleteAccount);
   router.get('/account/unlink/:provider', authMiddleware.isAuthenticated, userController.getOauthUnlink);
-
 };
