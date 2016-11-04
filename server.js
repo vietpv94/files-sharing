@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
-dotenv.load({ path: '.env.example' });
+dotenv.load({ path: '.env.dev' });
 
 require('./backend/webserver').webserver.start(function(err) {
   if(err) {
@@ -11,5 +11,3 @@ require('./backend/webserver').webserver.start(function(err) {
     console.log('Throwing:' + err);
   }
 });
-
-

@@ -26,6 +26,7 @@ module.exports = function (application) {
   application.post('/signup', user.postSignup);
 
   const passport = require('passport');
+
   application.get('/auth/google',
     passport.authenticate('google', { scope: ['profile email'] }));
   application.get('/auth/google/callback',
@@ -33,7 +34,15 @@ module.exports = function (application) {
     (req, res) => {
       res.redirect(req.session.returnTo || '/');
     });
+ /* const userController = require('./controllers/user');
+  const authMiddleware = require('./middleware/authentication');
 
+  application.get('/account', authMiddleware.isAuthenticated, userController.getAccount);
+  application.post('/account/profile', authMiddleware.isAuthenticated, userController.postUpdateProfile);
+  application.post('/account/password', authMiddleware.isAuthenticated, userController.postUpdatePassword);
+  application.post('/account/delete', authMiddleware.isAuthenticated, userController.postDeleteAccount);
+  application.get('/account/unlink/:provider', authMiddleware.isAuthenticated, userController.getOauthUnlink);
+*/
   const moduleApi = require('./api');
   moduleApi.setupAPI(application);
 };

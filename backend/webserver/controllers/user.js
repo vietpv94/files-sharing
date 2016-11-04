@@ -8,7 +8,7 @@ const User = require('../../core/db/mongo/models/User');
  * GET /login
  * Login page.
  */
-exports.getLogin = (req, res) => { console.log(1, 'sssss')
+exports.getLogin = (req, res) => {
   if (req.user) {
     return res.redirect('/');
   }
@@ -33,7 +33,7 @@ exports.postLogin = (req, res, next) => {
     return res.redirect('/login');
   }
 
-  passport.authenticate('local', (err, user, info) => {
+  passport.authenticate('mongo', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
       req.flash('errors', info);
