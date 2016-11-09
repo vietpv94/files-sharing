@@ -28,10 +28,12 @@ exports = module.exports = app;
  */
 app.set('port', process.env.PORT || 3000);
 app.set('views', FRONTEND_PATH + '/views');
-app.set('/components', express.static(FRONTEND_PATH + '/components'));
+app.set('view engine', 'jade');
+app.locals.pretty = true;
+
+app.use('/components', express.static(FRONTEND_PATH + '/components'));
 app.use('/js', express.static(FRONTEND_PATH + '/js'));
 
-app.set('view engine', 'pug');
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({

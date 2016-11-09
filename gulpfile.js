@@ -1,21 +1,24 @@
-var gulp = require('gulp');
-var concat = require('gulp-concat');
-var glob = require('glob-all');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
-var sass = require('gulp-sass');
-var cache = require('gulp-cache');
-var imagemin = require('gulp-imagemin');
-var gulpFilter = require('gulp-filter');
-var gulpBowerFiles = require('gulp-main-bower-files');
-var browserSync = require('browser-sync');
-var child = require('child_process');
-var fs = require('fs');
-var FRONTEND_JS_PATH = __dirname + '/frontend/';
-var dest = 'build/';
-var reload = browserSync.reload;
+const gulp = require('gulp');
+const concat = require('gulp-concat');
+const glob = require('glob-all');
+const uglify = require('gulp-uglify');
+const rename = require('gulp-rename');
+const sass = require('gulp-sass');
+const cache = require('gulp-cache');
+const imagemin = require('gulp-imagemin');
+const gulpFilter = require('gulp-filter');
+const gulpBowerFiles = require('gulp-main-bower-files');
+const browserSync = require('browser-sync');
+const child = require('child_process');
+const jade = require('gulp-jade');
+const path = require('path');
+const pluginLoader = require('gulp-load-plugins')();
+const fs = require('fs');
+const FRONTEND_JS_PATH = path.normalize(__dirname + '/../../frontend');
+const dest = 'build/';
+const reload = browserSync.reload;
 
-var frontendJsFiles = glob.sync([
+const frontendJsFiles = glob.sync([
         FRONTEND_JS_PATH + '**/*.module.js',
         FRONTEND_JS_PATH + '**/!(*spec).js'
       ]).map(function(filepath) {
@@ -25,7 +28,7 @@ var frontendJsFiles = glob.sync([
 gulp.task('scripts', function() {
 
   return gulp.src(frontendJsFiles)
-    .pipe(concat('main.js'))
+    .pipe(concat('index.js'))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
     .pipe(gulp.dest(dest + 'js'));
@@ -33,13 +36,14 @@ gulp.task('scripts', function() {
 
 gulp.task('sass', function() {
     return gulp.src(FRONTEND_JS_PATH + '**/*.scss', {style: 'compressed'})
+        .pipe(pluginLoader.sass({style: 'expanded'}))
         .pipe(rename({suffix: '.min'}))
         .pipe(gulp.dest(dest + 'css'))
         .pipe(reload({stream: true}));
 });
 
  gulp.task('images', function() {
-  return gulp.src(FRONTEND_JS_PATH + 'images/**/*')
+  return gulp.src(FRONTEND_JS_PATH + '/images/**/*')
     .pipe(cache(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true })))
     .pipe(gulp.dest(dest + 'img'));
 });
@@ -73,6 +77,15 @@ gulp.task('main-bower-files', function() {
 //   server.stderr.pipe(log);
 // });
 
+gulp.task('jade', function buildHTML() {
+  return gulp.src([FRONTEND_JS_PATH + '/views/**/*.jade'])
+    .pipe(pluginLoader.jade({
+      locals: '',
+      pretty: true,
+      doctype: 'html'
+    }))
+    .pipe(gulp.dest(dest));
+});
  // Watch for changes in files
 gulp.task('watch', function() {
    // Watch .js files
@@ -85,4 +98,4 @@ gulp.task('watch', function() {
   reload();
  });
  // Default Task
-gulp.task('default', ['scripts', 'sass', 'images', 'watch', 'main-bower-files']);
+gulp.task('default', ['scripts', 'sass', 'images', 'watch', 'main-bower-files', 'jade']);

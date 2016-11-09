@@ -1,11 +1,11 @@
 extends ../layout
 
 block content
-  .ui-view(name="root", noanimation)
   h2 My Files
   hr
 
-  .row
+  .row(ng-controller="myFileController as ctrl")
+    file-folder
     .col-xs-3
       a(href="#")
         .card
@@ -63,5 +63,24 @@ block content
               i.fa.fa-folder-o
               |  Quyet
 
-    button.btn.btn-floating.btn-mdb
+    button.btn.btn-floating.btn-mdb(ng-click="ctrl.addNewFolder()")
       i.mdi.mdi-plus
+
+    script(type="text/ng-template", id="add-folder-modal")
+      .modal
+        .modal-dialog
+          .modal-content(style="padding: 20px")
+            .body
+              h3.title Add New Folder
+              hr
+              .form-group
+                .input-group
+                  span.input-group-addon
+                    i.mdi.mdi-folder-plus
+                  .fg-line
+                    input.form-control(ng-model="$ctrl.folder", placeholder='Type a folder name...')
+              .footer
+                button.btn.btn-primary(ng-click="$ctrl.addFolder(); $hide()", ng-disabled="!$ctrl.folder")
+                  | Add
+                button.btn.btn-link(ng-click="$hide()")
+                  | Close

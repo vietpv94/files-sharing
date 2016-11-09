@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('dspApp', ['ui.router']);
+var app = angular.module('dsp', ['ui.router']);
 
 app.config(function($urlRouterProvider, $stateProvider, $locationProvider) {
 
@@ -11,7 +11,7 @@ app.config(function($urlRouterProvider, $stateProvider, $locationProvider) {
       url: '/home',
       views: {
         '': {
-          templateUrl: '/views/layout'
+          templateUrl: '/views/home'
         }
       }
     })
@@ -25,4 +25,12 @@ app.config(function($urlRouterProvider, $stateProvider, $locationProvider) {
     });
 
   $locationProvider.html5Mode(true);
+});
+
+app.run(function($rootScope, $location) {
+    $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
+        if (rejection === 'not authorized') {
+            $location.path('/');
+        }
+    });
 });

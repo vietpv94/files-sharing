@@ -11,17 +11,20 @@ html
     link(rel='shortcut icon', href='/favicon.ico')
     link(rel='stylesheet', href='/css/main.css')
     link(rel="stylesheet", href="/components/bootstrap/dist/css/bootstrap.min.css")
+    link(rel='stylesheet', href='/components/angular-motion/dist/angular-motion.min.css')
     link(rel='stylesheet', href='/components/mdi/css/materialdesignicons.min.css', media='all')
 
     script(src='/components/jquery/dist/jquery.min.js')
     script(src='/components/bootstrap/dist/js/bootstrap.min.js')
     script(src='/components/angular/angular.min.js')
     script(src='/components/angular-component/dist/angular-component.min.js')
+    script(src='/components/angular-strap/dist/angular-strap.min.js')
+    script(src='/components/angular-strap/dist/angular-strap.tpl.min.js')
     script(src='/components/angular-ui-router/release/angular-ui-router.min.js')
-    //script(src="index.js")
+    script(src="index.js")
+    script(src="js/controllers.js")
 
-  body
-    ui-view
+  body(ng-app="dsp")
     include partials/header
 
     .container
