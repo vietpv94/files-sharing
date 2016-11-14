@@ -1,10 +1,14 @@
 const userController = require('../controllers/user');
 const authMiddleware = require('../middleware/authentication');
 
-module.exports = function (app) {
-  app.get('/account', authMiddleware.isAuthenticated, userController.getAccount);
-  app.post('/account/profile', authMiddleware.isAuthenticated, userController.postUpdateProfile);
-  app.post('/account/password', authMiddleware.isAuthenticated, userController.postUpdatePassword);
-  app.post('/account/delete', authMiddleware.isAuthenticated, userController.postDeleteAccount);
-  app.get('/account/unlink/:provider', authMiddleware.isAuthenticated, userController.getOauthUnlink);
+module.exports = function (router) {
+  router.post('/login', userController.postLogin);
+
+  router.post('/signup', userController.postSignup);
+
+  router.get('/profile/:uuid', authMiddleware.isAuthenticated, userController.profile);
+  router.post('/account/profile', authMiddleware.isAuthenticated, userController.postUpdateProfile);
+  router.post('/account/password', authMiddleware.isAuthenticated, userController.postUpdatePassword);
+  router.post('/account/delete', authMiddleware.isAuthenticated, userController.postDeleteAccount);
+  router.get('/account/unlink/:provider', authMiddleware.isAuthenticated, userController.getOauthUnlink);
 };

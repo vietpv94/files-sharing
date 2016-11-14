@@ -5,7 +5,7 @@ html
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='theme-color' content='#0064be')
-    meta(name='csrf-token', content=_csrf)
+    //meta(name='csrf-token', content=_csrf)
     base(href="/")
     title #{title} - Files Sharing System
     link(rel='shortcut icon', href='/favicon.ico')
@@ -18,17 +18,23 @@ html
     script(src='/components/bootstrap/dist/js/bootstrap.min.js')
     script(src='/components/angular/angular.min.js')
     script(src='/components/angular-component/dist/angular-component.min.js')
+    script(src='/components/angular-ui-router/release/angular-ui-router.min.js')
     script(src='/components/angular-strap/dist/angular-strap.min.js')
     script(src='/components/angular-strap/dist/angular-strap.tpl.min.js')
-    script(src='/components/angular-ui-router/release/angular-ui-router.min.js')
+    script(src='/components/lodash/dist/lodash.min.js')
+    script(src='/components/restangular/dist/restangular.min.js')
+    script(src="js/modules/http.js")
+    script(src="js/modules/session.js")
     script(src="index.js")
     script(src="js/controllers.js")
+    script(src="js/components.js")
+    script(src="js/services.js")
 
-  body(ng-app="dsp")
+  body.ng-cloak(ng-app="dsp")
     include partials/header
 
     .container
       include partials/flash
-      block content
+      div(ui-view="root")
 
     include partials/footer

@@ -6,23 +6,23 @@
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a.navbar-brand(href='/')
+      a.navbar-brand(ui-sref="home")
         i.fa.fa-github-alt
         | Files Sharing
     .collapse.navbar-collapse
       ul.nav.navbar-nav
         li(class=(title == 'Home') ? 'active' : undefined)
-          a(href="/", ui-sref-active="selected") Home
+          a(ui-sref="home") Home
         li(class=(title == 'Files Uploaded') ? 'active' : undefined)
-          a(href="/my-files", ui-sref-active="selected") Files Uploaded
+          a(ui-sref="my-files") Files Uploaded
         li(class=(title == 'About Team') ? 'active' : undefined)
-          a(href="/about", ui-sref-active="selected") About Team
+          a(ui-sref="about") About Team
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=(title == 'Login') ? 'active' : undefined)
-            a(href='/login') Login
+            a(ui-sref='login') Login
           li(class=(title == 'Create Account') ? 'active' : undefined)
-            a(href='/signup') Create Account
+            a(ui-sref='signup') Create Account
         else
           li.dropdown(class=(title == 'Account Management') ? 'active' : undefined)
             a.dropdown-toggle(href='#', data-toggle='dropdown')
@@ -34,7 +34,7 @@
               i.caret
             ul.dropdown-menu
               li
-                a(href='/account') My Account
+                a(ui-sref='profile') My Account
               li.divider
               li
                 a(href='/logout') Logout

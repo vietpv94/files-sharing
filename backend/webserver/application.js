@@ -29,10 +29,16 @@ exports = module.exports = app;
 app.set('port', process.env.PORT || 3000);
 app.set('views', FRONTEND_PATH + '/views');
 app.set('view engine', 'jade');
+app.get('/views/*', function(req, res) {
+    var templateName = req.params[0].replace(/\.html$/, '');
+    res.render(templateName, { basedir: FRONTEND_PATH + '/views' });
+  }
+);
 app.locals.pretty = true;
 
 app.use('/components', express.static(FRONTEND_PATH + '/components'));
 app.use('/js', express.static(FRONTEND_PATH + '/js'));
+app.use('/modules', express.static(FRONTEND_PATH + '/modules'));
 
 app.use(expressStatusMonitor());
 app.use(compression());
@@ -61,13 +67,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(flash());
-app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
-    next();
-  } else {
-    lusca.csrf()(req, res, next);
-  }
-});
 
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));

@@ -7,10 +7,12 @@ const User = require('../db/mongo/models/User');
  * @param {Function} done
  */
 function auth(email, password, done) {
-  User.findOne({ email: email.toLowerCase() }, (err, user) => {
-    if (err) { return done(err); }
+  User.loadFromEmail(email, (err, user) => {
+    if (err) {
+      return done(err);
+    }
     if (!user) {
-      return done(null, false, { msg: `Email ${email} not found.` });
+      return done(null, false, { message: 'Email ' + email + ' not found'});
     }
     user.comparePassword(password, (err, isMatch) => {
       if (err) { return done(err); }
@@ -18,7 +20,7 @@ function auth(email, password, done) {
         return done(null, user);
       }
 
-      return done(null, false, { msg: 'Invalid email or password.' });
+      return done(null, false, { message: 'Invalid email or password.' });
     });
   });
 }

@@ -9,7 +9,6 @@ const imagemin = require('gulp-imagemin');
 const gulpFilter = require('gulp-filter');
 const gulpBowerFiles = require('gulp-main-bower-files');
 const browserSync = require('browser-sync');
-const child = require('child_process');
 const jade = require('gulp-jade');
 const path = require('path');
 const pluginLoader = require('gulp-load-plugins')();

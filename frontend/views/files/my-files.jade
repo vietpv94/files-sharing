@@ -1,86 +1,65 @@
-extends ../layout
+h2 My Files
+hr
 
-block content
-  h2 My Files
-  hr
+.row(ng-controller="myFileController as ctrl")
+  file-folder
+  .col-xs-3
+    a(href="#")
+      .card
+        .panel.panel-default
+          .panel-body
+            i.fa.fa-folder-o
+            |  Secret
+  .col-xs-3
+    a(href="#")
+      .card
+        .panel.panel-default
+          .panel-body
+            i.fa.fa-folder-o
+            |  Don't look
+  .col-xs-3
+    a(href="#")
+      .card
+        .panel.panel-default
+          .panel-body
+            i.fa.fa-folder-o
+            |  Son
+  .col-xs-3
+    a(href="#")
+      .card
+        .panel.panel-default
+          .panel-body
+            i.fa.fa-folder-o
+            |  Folder
+  .col-xs-3
+    a(href="#")
+      .card
+        .panel.panel-default
+          .panel-body
+            i.fa.fa-folder-o
+            |  Tung
+  .col-xs-3
+    a(href="#")
+      .card
+        .panel.panel-default
+          .panel-body
+            i.fa.fa-folder-o
+            |  File Upload
+  .col-xs-3
+    a(href="#")
+      .card
+        .panel.panel-default
+          .panel-body
+            i.fa.fa-folder-o
+            |  XXX
+  .col-xs-3
+    a(href="#")
+      .card
+        .panel.panel-default
+          .panel-body
+            i.fa.fa-folder-o
+            |  Quyet
 
-  .row(ng-controller="myFileController as ctrl")
-    file-folder
-    .col-xs-3
-      a(href="#")
-        .card
-          .panel.panel-default
-            .panel-body
-              i.fa.fa-folder-o
-              |  Secret
-    .col-xs-3
-      a(href="#")
-        .card
-          .panel.panel-default
-            .panel-body
-              i.fa.fa-folder-o
-              |  Don't look
-    .col-xs-3
-      a(href="#")
-        .card
-          .panel.panel-default
-            .panel-body
-              i.fa.fa-folder-o
-              |  Son
-    .col-xs-3
-      a(href="#")
-        .card
-          .panel.panel-default
-            .panel-body
-              i.fa.fa-folder-o
-              |  Folder
-    .col-xs-3
-      a(href="#")
-        .card
-          .panel.panel-default
-            .panel-body
-              i.fa.fa-folder-o
-              |  Tung
-    .col-xs-3
-      a(href="#")
-        .card
-          .panel.panel-default
-            .panel-body
-              i.fa.fa-folder-o
-              |  File Upload
-    .col-xs-3
-      a(href="#")
-        .card
-          .panel.panel-default
-            .panel-body
-              i.fa.fa-folder-o
-              |  XXX
-    .col-xs-3
-      a(href="#")
-        .card
-          .panel.panel-default
-            .panel-body
-              i.fa.fa-folder-o
-              |  Quyet
 
-    button.btn.btn-floating.btn-mdb(ng-click="ctrl.addNewFolder()")
-      i.mdi.mdi-plus
-
-    script(type="text/ng-template", id="add-folder-modal")
-      .modal
-        .modal-dialog
-          .modal-content(style="padding: 20px")
-            .body
-              h3.title Add New Folder
-              hr
-              .form-group
-                .input-group
-                  span.input-group-addon
-                    i.mdi.mdi-folder-plus
-                  .fg-line
-                    input.form-control(ng-model="$ctrl.folder", placeholder='Type a folder name...')
-              .footer
-                button.btn.btn-primary(ng-click="$ctrl.addFolder(); $hide()", ng-disabled="!$ctrl.folder")
-                  | Add
-                button.btn.btn-link(ng-click="$hide()")
-                  | Close
+  button.btn.btn-floating.btn-mdb(ng-click="ctrl.addNewFolder()")
+    i.mdi.mdi-plus

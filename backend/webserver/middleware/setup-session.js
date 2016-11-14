@@ -10,7 +10,7 @@ function setupSession(session) {
   var setSession = function() {
     console.log('mongo is connected, setting up mongo session store');
 
-    session({
+    session.setMiddleware(expressSession({
       resave: true,
       saveUninitialized: true,
       secret: process.env.SESSION_SECRET,
@@ -19,7 +19,7 @@ function setupSession(session) {
         url: process.env.MONGODB_URI || process.env.MONGOLAB_URI,
         autoReconnect: true
       })
-    });
+    }));
   };
 
   if (mongo.isConnected()) {

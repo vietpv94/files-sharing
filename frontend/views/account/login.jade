@@ -1,24 +1,21 @@
-extends ../layout
-
-block content
-  .page-header
-    h3 Sign in
-  form.form-horizontal(method='POST')
-    input(type='hidden', name='_csrf', value=_csrf)
+.page-header
+  h3 Sign in
+form(name='form')
+  .form-horizontal(ng-controller="login")
     .form-group
-      label.col-sm-3.control-label(for='email') Email
+      label.col-sm-3.control-label(for='username') Email
       .col-sm-7
-        input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus, required)
+        input.form-control(type='email', ng-model='credentials.username', name='email', id='username', placeholder='Email', autofocus=true, required)
     .form-group
       label.col-sm-3.control-label(for='password') Password
       .col-sm-7
-        input.form-control(type='password', name='password', id='password', placeholder='Password', required)
+        input.form-control(type='password', ng-model='credentials.password', name='password', id='password', placeholder='Password', required)
     .form-group
       .col-sm-offset-3.col-sm-7
-        button.col-sm-3.btn.btn-primary(type='submit')
+        button.col-sm-3.btn.btn-primary(type='submit', ng-click="login(form)")
           i.fa.fa-user
           | Login
-        a.btn.btn-link(href='/forgot') Forgot your password?
+        a.btn.btn-link(ui-sref='forgot') Forgot your password?
     .form-group
       .col-sm-offset-3.col-sm-7
         hr

@@ -1,24 +1,21 @@
-extends ../layout
-
-block content
-  .page-header
-    h3 Sign up
-  form.form-horizontal(id='signup-form', method='POST')
-    input(type='hidden', name='_csrf', value=_csrf)
+.page-header
+  h3 Sign up
+form(name="form")
+  .form-horizontal(ng-controller="signup")
     .form-group
       label.col-sm-3.control-label(for='email') Email
       .col-sm-7
-        input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus, required)
+        input.form-control(type='email', name='email', ng-model="settings.username", id='email', placeholder='Email', autofocus, required)
     .form-group
       label.col-sm-3.control-label(for='password') Password
       .col-sm-7
-        input.form-control(type='password', name='password', id='password', placeholder='Password', required)
+        input.form-control(type='password', name='password', ng-model="settings.password", id='password', placeholder='Password', required)
     .form-group
       label.col-sm-3.control-label(for='confirmPassword') Confirm Password
       .col-sm-7
-        input.form-control(type='password', name='confirmPassword', id='confirmPassword', placeholder='Confirm Password', required)
+        input.form-control(type='password', name='confirmPassword', ng-model="settings.confirmPassword", id='confirmPassword', placeholder='Confirm Password', required)
     .form-group
       .col-sm-offset-3.col-sm-7
-        button.btn.btn-success(type='submit')
+        button.btn.btn-success(type='submit', ng-click="signup(form)")
           i.fa.fa-user-plus
           | Signup

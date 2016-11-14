@@ -3,47 +3,57 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../../core/db/mongo/models/User');
-/**
- * GET /login
- * GET /login
- * Login page.
- */
-exports.getLogin = (req, res) => {
-  if (req.user) {
-    return res.redirect('/');
-  }
-  res.render('account/login', {
-    title: 'Login'
-  });
-};
+const userlogin = require('../../core/user/login');
+const userModule = require('../../core/user');
 
 /**
  * POST /login
  * Sign in using email and password.
  */
 exports.postLogin = (req, res, next) => {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password cannot be blank').notEmpty();
-  req.sanitize('email').normalizeEmail({ remove_dots: false });
 
-  const errors = req.validationErrors();
-
-  if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/login');
-  }
+  const username = req.body.username;
 
   passport.authenticate('mongo', (err, user, info) => {
-    if (err) { return next(err); }
-    if (!user) {
-      req.flash('errors', info);
-      return res.redirect('/login');
+    if (err) {
+      return next(err);
     }
-    req.logIn(user, (err) => {
-      if (err) { return next(err); }
-      req.flash('success', { msg: 'Success! You are logged in.' });
-      res.redirect(req.session.returnTo || '/');
-    });
+
+    if (!user) {
+      userlogin.failure(username, function(err, data) {
+        if (err) {
+          console.log('ERROR', 'Problem while setting login failure for user ' + username, err);
+        }
+        return res.status(403).json({
+          error: {
+            code: 403,
+            message: 'Login error',
+            details: 'Bad username or password'
+          }
+        });
+      });
+
+      req.flash('errors', { msg: 'Failed! You are not logged in.' });
+    } else {
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        userlogin.success(username, function(err, user) {
+          if (err) {
+            console.log('ERROR', 'Problem while setting login success for user ' + username, err);
+          }
+
+          var result = {};
+          if (user) {
+            result = user.toObject();
+            delete result.password;
+          }
+          return res.status(200).json(result);
+        });
+        req.flash('success', { msg: 'Success! You are logged in.' });
+      });
+    }
   })(req, res, next);
 };
 
@@ -59,55 +69,42 @@ exports.logout = (req, res) => {
 };
 
 /**
- * GET /signup
- *
- * @param {request} req
- * @param {response} res
- */
-exports.getSignup = (req, res) => {
-  if (req.user) {
-    return res.redirect('/');
-  }
-  res.render('account/signup', {
-    title: 'Create Account'
-  });
-};
-
-/**
  * POST /signup
  * Create a new local account.
  */
 exports.postSignup = (req, res, next) => {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 4 characters long').len(4);
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
-  req.sanitize('email').normalizeEmail({ remove_dots: false });
-
-  const errors = req.validationErrors();
-
-  if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/signup');
-  }
 
   const user = new User({
-    email: req.body.email,
+    email: req.body.username,
     password: req.body.password
   });
 
-  User.findOne({ email: req.body.email }, (err, existingUser) => {
+  User.findOne({ email: req.body.username }, (err, existingUser) => {
     if (err) { return next(err); }
+
     if (existingUser) {
-      req.flash('errors', { msg: 'Account with that email address already exists.' });
-      return res.redirect('/signup');
+      console.log(existingUser);
+      return res.status(400).json({ error: { status: 400, message: 'Bad request', details: 'User is exist hoho!'}});
     }
     user.save((err) => {
-      if (err) { return next(err); }
+      if (err) {
+        return res.status(400).json({ error: { status: 400, message: 'Bad request', details: err.message}});
+      }
       req.logIn(user, (err) => {
-        if (err) {
-          return next(err);
-        }
-        res.redirect('/');
+        if (err) { return next(err); }
+        userlogin.success(req.body.email, function(err, user) {
+          if (err) {
+            logger.error('Problem while setting login success for user ' + username, err);
+          }
+
+          var result = {};
+          if (user) {
+            result = user.toObject();
+            delete result.password;
+          }
+          return res.status(200).json(result);
+        });
+        req.flash('success', { msg: 'Success! You are logged in.' });
       });
     });
   });
@@ -117,9 +114,30 @@ exports.postSignup = (req, res, next) => {
  * GET /account
  * Profile page.
  */
-exports.getAccount = (req, res) => {
-  res.render('account/profile', {
-    title: 'Account Management'
+exports.profile = (req, res, next) => {
+  var uuid = req.params.uuid;
+  if (!uuid) {
+    return res.status(400).json({error: {code: 400, message: 'Bad parameters', details: 'User ID is missing'}});
+  }
+
+  userModule.get(uuid, function(err, user) {
+    if (err) {
+      return res.status(500).json({
+        error: 500,
+        message: 'Error while loading user ' + uuid,
+        details: err.message
+      });
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        error: 404,
+        message: 'User not found',
+        details: 'User ' + uuid + ' has not been found'
+      });
+    }
+    var result = user.toObject();
+    res.status(200).json(result);
   });
 };
 
@@ -254,65 +272,10 @@ exports.postReset = (req, res, next) => {
     return res.redirect('back');
   }
 
-  async.waterfall([
-    function (done) {
-      User
-        .findOne({ passwordResetToken: req.params.token })
-        .where('passwordResetExpires').gt(Date.now())
-        .exec((err, user) => {
-          if (err) { return next(err); }
-          if (!user) {
-            req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
-            return res.redirect('back');
-          }
-          user.password = req.body.password;
-          user.passwordResetToken = undefined;
-          user.passwordResetExpires = undefined;
-          user.save((err) => {
-            if (err) { return next(err); }
-            req.logIn(user, (err) => {
-              done(err, user);
-            });
-          });
-        });
-    },
-    function (user, done) {
-      const transporter = nodemailer.createTransport({
-        service: 'SendGrid',
-        auth: {
-          user: process.env.SENDGRID_USER,
-          pass: process.env.SENDGRID_PASSWORD
-        }
-      });
-      const mailOptions = {
-        to: user.email,
-        from: 'noreply@localhost',
-        subject: 'Your password has been changed',
-        text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n`
-      };
-      transporter.sendMail(mailOptions, (err) => {
-        req.flash('success', { msg: 'Success! Your password has been changed.' });
-        done(err);
-      });
-    }
-  ], (err) => {
-    if (err) { return next(err); }
-    res.redirect('/');
-  });
+
+
 };
 
-/**
- * GET /forgot
- * Forgot Password page.
- */
-exports.getForgot = (req, res) => {
-  if (req.isAuthenticated()) {
-    return res.redirect('/');
-  }
-  res.render('account/forgot', {
-    title: 'Forgot Password'
-  });
-};
 
 /**
  * POST /forgot
