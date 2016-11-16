@@ -30,6 +30,14 @@
           }
         }
       })
+      .state('upload', {
+        url: '/upload',
+        views: {
+          'root': {
+            templateUrl: '/views/files/upload'
+          }
+        }
+      })
       .state('about', {
         url: '/about',
         views: {

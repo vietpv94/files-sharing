@@ -124,12 +124,16 @@ angular.module('dsp')
   }
 })
 
-.controller('listFilesController', function($stateParams, folderAPI) {
+.controller('listFilesController', function($stateParams, $state, folderAPI) {
   var folderId = $stateParams.folderId;
   var self = this;
 
   folderAPI.getFolder(folderId).then(function(data) {
-    self.folder = data;console.log(data)
+    self.folder = data;
   });
+
+  self.uploadFile = function() {
+    $state.go('upload');
+  }
 });
 
