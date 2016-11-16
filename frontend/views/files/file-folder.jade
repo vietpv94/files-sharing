@@ -1,8 +1,8 @@
 div
   .col-xs-3
-    a(href="#")
+    a(ng-click="$ctrl.viewInside($ctrl.folder._id)")
       .card
         .panel.panel-default
-          .panel-body
+          .panel-body(style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis")
             i.fa.fa-folder-o
-            |  Secret
+            |  {{$ctrl.folder.name}}

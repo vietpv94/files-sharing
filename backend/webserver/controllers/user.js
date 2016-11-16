@@ -114,7 +114,7 @@ exports.postSignup = (req, res, next) => {
  * GET /account
  * Profile page.
  */
-exports.profile = (req, res, next) => {
+exports.profile = (req, res) => {
   var uuid = req.params.uuid;
   if (!uuid) {
     return res.status(400).json({error: {code: 400, message: 'Bad parameters', details: 'User ID is missing'}});
@@ -137,7 +137,8 @@ exports.profile = (req, res, next) => {
       });
     }
     var result = user.toObject();
-    res.status(200).json(result);
+    delete result.password;
+    return res.status(200).json(result);
   });
 };
 

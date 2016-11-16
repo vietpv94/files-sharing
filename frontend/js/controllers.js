@@ -57,8 +57,9 @@ angular.module('dsp')
       function() {
         $scope.loginIn = true;
         $scope.signupTask.running = false;
-        $window.location.reload();
+        SessionService.set('user', JSON.stringify(user.data));
         $state.go('home');
+        $window.location.reload();
       },
       function(err) {
         $scope.signupTask.running = false;
@@ -71,13 +72,17 @@ angular.module('dsp')
 .controller('profile', function($scope, profileAPI, SessionService) {
   var userId = JSON.parse(SessionService.get('user'))._id;
 
-  profileAPI.user(userId).then(function(profile) {
-    console.log(profile)
-  })
+  profileAPI.getUser(userId).then(function(profile) {
+    $scope.user = profile;
+  });
 })
 
-.controller('myFileController', function($modal) {
+.controller('myFileController', function($modal,$scope, folderAPI) {
   var self = this;
+
+  folderAPI.getFolders().then(function(folders) {
+    self.folders = folders;
+  });
 
   var addModal = $modal({
     templateUrl: '/views/files/add-folder-modal',
@@ -90,19 +95,41 @@ angular.module('dsp')
 
   self.addNewFolder = function() {
     addModal.$promise.then(addModal.show);
-  }
+  };
+
 })
 
-.controller('addFolderController', function() {
+.controller('addFolderController', function(folderAPI, $window) {
   var self = this;
 
-  self.folder;
+  self.folderName = "";
 
   self.add = function() {
-    console.log(self.folder)
+    if(self.folderName) {
+      var folder = {
+        name: self.folderName,
+        createdAt: Date.now()
+      };
+      folderAPI.addFolder(folder);
+    }
+    $window.location.reload();
   }
 })
 
-.controller('listFolderController', function() {
+.controller('listFolderController', function($state) {
+  var self = this;
 
+  self.viewInside = function(folderId) {
+    $state.go('folders', { folderId: folderId });
+  }
+})
+
+.controller('listFilesController', function($stateParams, folderAPI) {
+  var folderId = $stateParams.folderId;
+  var self = this;
+
+  folderAPI.getFolder(folderId).then(function(data) {
+    self.folder = data;console.log(data)
+  });
 });
+

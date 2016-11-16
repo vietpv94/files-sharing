@@ -9,6 +9,7 @@ function setupAPI(application) {
 
   require('./user')(router);
   require('./folder')(router);
+  require('./file')(router);
 
   application.use('/api', router);
 }

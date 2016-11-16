@@ -6,7 +6,6 @@ module.exports = function (router) {
 
   router.post('/signup', userController.postSignup);
 
-  router.get('/profile/:uuid', authMiddleware.isAuthenticated, userController.profile);
   router.post('/account/profile', authMiddleware.isAuthenticated, userController.postUpdateProfile);
   router.post('/account/password', authMiddleware.isAuthenticated, userController.postUpdatePassword);
   router.post('/account/delete', authMiddleware.isAuthenticated, userController.postDeleteAccount);

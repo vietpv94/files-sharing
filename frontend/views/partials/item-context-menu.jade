@@ -1,0 +1,40 @@
+#context-menu.dropdown.clearfix.animated.fast.fadeIn
+  ul.dropdown-menu.dropdown-right-click(role='menu', aria-labelledby='dropdownMenu', ng-show='temps.length')
+    li
+      a(href='', tabindex='-1', ng-click='smartClick(singleSelection())')
+        i.glyphicon.glyphicon-folder-open
+        |  {{'open'}}
+    li
+      a(href='', tabindex='-1', ng-click='config.pickCallback(singleSelection().model)')
+        i.glyphicon.glyphicon-hand-up
+        |  {{'select_this'}}
+    li
+      a(href='', tabindex='-1', ng-click='download()')
+        i.glyphicon.glyphicon-cloud-download
+        |  {{'download'}}
+    li
+      a(href='', tabindex='-1', ng-click="modal('rename')")
+        i.glyphicon.glyphicon-edit
+        |  {{'rename'}}
+    li
+      a(href='', tabindex='-1', ng-click="modalWithPathSelector('move')")
+        i.glyphicon.glyphicon-arrow-right
+        |  {{'move'}}
+    li
+      a(href='', tabindex='-1', ng-click="modalWithPathSelector('copy')")
+        i.glyphicon.glyphicon-log-out
+        |  {{'copy'}}
+    li.divider(ng-show='config.allowedActions.remove')
+    li
+      a(href='', tabindex='-1', ng-click="modal('remove')")
+        i.glyphicon.glyphicon-trash
+        |  {{'remove'}}
+  ul.dropdown-menu.dropdown-right-click(role='menu', aria-labelledby='dropdownMenu', ng-show='!temps.length')
+    li
+      a(href='', tabindex='-1', ng-click="modal('newfolder') && prepareNewFolder()")
+        i.glyphicon.glyphicon-plus
+        |  {{'new_folder'}}
+    li
+      a(href='', tabindex='-1', ng-click="modal('uploadfile')")
+        i.glyphicon.glyphicon-cloud-upload
+        |  {{'upload_files'}}

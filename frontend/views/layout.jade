@@ -29,6 +29,7 @@ html
     script(src="js/controllers.js")
     script(src="js/components.js")
     script(src="js/services.js")
+    script(src="js/directives.js")
 
   body.ng-cloak(ng-app="dsp")
     include partials/header
@@ -37,4 +38,5 @@ html
       include partials/flash
       div(ui-view="root")
 
+    include partials/item-context-menu
     include partials/footer

@@ -9,9 +9,9 @@
             span.input-group-addon
               i.mdi.mdi-folder-plus
             .fg-line
-              input.form-control(ng-model="$ctrl.folder", placeholder='Type a folder name...')
+              input.form-control(ng-model="$ctrl.folderName", placeholder='Type a folder name...')
         .footer
-          button.btn.btn-primary(ng-click="$ctrl.add(); $hide()", ng-disabled="!$ctrl.folder")
+          button.btn.btn-primary(ng-click="$ctrl.add(); $hide()", ng-disabled="!$ctrl.folderName")
             | Add
           button.btn.btn-link(ng-click="$hide()")
             | Close

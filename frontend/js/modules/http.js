@@ -14,19 +14,6 @@ angular.module('dsp.http', ['restangular'])
       });
     });
   })
-  .factory('redirectWhenNotAuthInterceptor', function($q, httpErrorHandler) {
-    return {
-      responseError: function(rejection) {
-        if (rejection.status === 401) {
-          httpErrorHandler.redirectToLogin();
-        }
-        return $q.reject(rejection);
-      }
-    };
-  })
-
-  .constant('HTTP_LAG_UPPER_BOUND', 500)
-
   .factory('httpErrorHandler', function($window, $location, $log) {
 
     function redirectToLogin() {

@@ -40,25 +40,44 @@ angular.module('dsp')
   };
 })
 
-.factory('profileAPI', function(dspRestangular) {
-  function user(uuid) {
-    return dspRestangular.one('profile', uuid).get();
-  }
+.factory('profileAPI', function($q, Restangular, dspRestangular) {
+  function getUser(uuid) {
+    return dspRestangular
+      .one('profile', uuid).get().then(function(res) {
+        if (res.status !== 200) {
+          return $q.reject(res);
+        }
 
-  function updateProfileField(fieldName, fieldValue) {
-    var payload = {
-      value: fieldValue
-    };
-    return dspRestangular.one('account/profile', fieldName).customPUT(payload);
-  }
-
-  function updateProfile(profile) {
-    return dspRestangular.one('account/profile').customPUT(profile);
+        return Restangular.stripRestangular(res.data);
+      });
   }
 
   return {
-    user: user,
-    updateProfileField: updateProfileField,
-    updateProfile: updateProfile
+    getUser: getUser
   };
+})
+
+.factory('folderAPI', function(dspRestangular, Restangular) {
+  function addFolder(folder) {
+    return dspRestangular
+      .all('folders').post(folder);
+  }
+
+  function getFolders() {
+    return dspRestangular.all('folders').getList().then(function(res) {
+      return Restangular.stripRestangular(res.data);
+    });
+  }
+
+  function getFolder(id) {
+    return dspRestangular.one('folders', id).get().then(function(res) {console.log(res.data)
+      return Restangular.stripRestangular(res.data);
+    });
+  }
+
+  return {
+    addFolder: addFolder,
+    getFolders: getFolders,
+    getFolder: getFolder
+  }
 });

@@ -4,5 +4,8 @@ angular.module('dsp')
 
 .component('fileFolder', {
   templateUrl: '/views/files/file-folder',
-  controller: 'listFolderController'
+  controller: 'listFolderController',
+  bindings: {
+    folder: '<'
+  }
 });
