@@ -1,13 +1,13 @@
 'use strict';
 
-angular.module('dsp.file', ['angularFileUpload', 'dsp.http'])
+angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
 
   .constant('FILES_API_URL', '/api/files')
   .constant('DEFAULT_FILE_TYPE', 'application/octet-stream')
 
   .factory('fileUploadService', function($q, $timeout, $log, fileAPIService, FILES_API_URL, DEFAULT_FILE_TYPE) {
 
-    function get(uploader) {
+    function get() {
       var date = Date.now();
       var tracker = [];
       var processed = 0;
@@ -81,7 +81,7 @@ angular.module('dsp.file', ['angularFileUpload', 'dsp.http'])
         task.uploading = true;
         task.progress = 0;
 
-        task.uploader = (uploader || fileAPIService).uploadFile(FILES_API_URL, task.file, task.file.type || DEFAULT_FILE_TYPE, task.file.size, {}, task.canceler.promise)
+        task.uploader = fileAPIService.uploadFile(FILES_API_URL, task.file, task.file.type || DEFAULT_FILE_TYPE, task.file.size, {}, task.canceler.promise)
           .then(function(response) {
             task.progress = 100;
             task.uploaded = true;
@@ -124,9 +124,9 @@ angular.module('dsp.file', ['angularFileUpload', 'dsp.http'])
       get: get
     };
   })
-  .factory('fileAPIService', function($upload, dspRestangular) {
+  .factory('fileAPIService', function(Upload, dspRestangular) {
     function uploadBlob(url, blob, mime, size, canceler) {
-      return $upload.http({
+      return Upload.http({
         method: 'POST',
         url: url,
         headers: {'Content-Type': mime},
@@ -142,7 +142,7 @@ angular.module('dsp.file', ['angularFileUpload', 'dsp.http'])
       if (options) {
         angular.extend(params, options);
       }
-      return $upload.upload({
+      return Upload.upload({
         method: 'POST',
         url: url,
         file: file,
@@ -337,22 +337,5 @@ angular.module('dsp.file', ['angularFileUpload', 'dsp.http'])
   .filter('extension', function(contentTypeService) {
     return function(contentType) {
       return contentTypeService.getExtension(contentType);
-    };
-  })
-
-
-  .service('XMLHttpRequest', function($window) {
-    return $window.XMLHttpRequest;
-  })
-
-  .factory('xhrWithUploadProgress', function(XMLHttpRequest) {
-    return function(callback) {
-      return function() {
-        var xhr = new XMLHttpRequest();
-
-        xhr.upload.addEventListener('progress', callback);
-
-        return xhr;
-      };
     };
   });

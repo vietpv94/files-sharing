@@ -9109,3 +9109,18 @@ textarea {
 @media (min-width: 992px) {
   .modal-lg {
     width: 900px; } }
+
+.badge-container {
+  padding-right: 0; }
+  .badge-container .composer-badge {
+    background: #2196F3;
+    top: 8px;
+    right: 11px;
+    font-weight: bold;
+    line-height: 16px;
+    height: 16px;
+    min-width: 16px; }
+    .badge-container .composer-badge.error {
+      background: #F44336; }
+  .badge-container .uploading {
+    animation: flashing-desktop 2.5s infinite linear; }

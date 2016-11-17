@@ -2,6 +2,7 @@
  * GET folders
  */
 const Folders = require('../../core/db/mongo/models/Folder');
+const mongoose = require('mongoose');
 
 exports.create = (req, res, next) => {
   const folder = new Folders({
@@ -9,10 +10,13 @@ exports.create = (req, res, next) => {
   });
 
   Folders.findOne({ name: req.body.name }, (err, existFolder) => {
-    if(err) { return next(err); }
+    if (err) {
+      return next(err);
+    }
 
     folder.name = existFolder ? req.body.name + '(copy) ' + req.body.createdAt : req.body.name;
 
+    folder.userId = mongoose.Types.ObjectId(req.body.userId);
     folder.save((err, saved) => {
       if (err) {
         return next(err);
@@ -28,12 +32,18 @@ exports.create = (req, res, next) => {
 };
 
 exports.get = (req, res, next) => {
-  Folders.find((err, folders) => {
+  const userId = req.params.uuid;
+
+  if (!userId) {
+    return res.status(400).json({error: {code: 400, message: 'Bad parameters', details: 'User ID is missing'}});
+  }
+
+  Folders.find({ userId: userId }, (err, folders) => {
     if (err) {
       return next(err);
     }
 
-    if (folders) {console.log(folders);
+    if (folders) {
       return res.status(200).json(folders);
     }
 
@@ -41,7 +51,7 @@ exports.get = (req, res, next) => {
   });
 };
 
-exports.getFolders = (req, res) => {console.log('test')
+exports.getFolders = (req, res) => {
   var folderId = req.params.folderId;
   if (!folderId) {
     return res.status(400).json({
@@ -67,7 +77,7 @@ exports.getFolders = (req, res) => {console.log('test')
       });
     }
 
-    var result = folder.toObject();console.log(result);
+    var result = folder.toObject();
 
     return res.status(200).json(result);
   })

@@ -10,12 +10,10 @@ const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
-const multer = require('multer');
 const setupSession = require('./middleware/setup-session');
 const cdm = require('connect-dynamic-middleware');
 
 const FRONTEND_PATH = path.normalize(__dirname + '/../../frontend');
-const upload = multer({ dest: FRONTEND_PATH + 'uploads' });
 
 /**
  * Create Express server.

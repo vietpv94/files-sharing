@@ -1,7 +1,7 @@
 'use strict';
 
-  angular.module('dsp', ['ui.router', 'mgcrea.ngStrap', 'dsp.session', 'dsp.http'])
-
+  angular.module('dsp', ['ui.router', 'mgcrea.ngStrap', 'ngFileUpload', 'dsp.session', 'dsp.http', 'dsp.file'])
+  .constant('_', window._)
   .config(function($urlRouterProvider, $stateProvider, $locationProvider) {
     $urlRouterProvider.otherwise('/home');
 
@@ -22,8 +22,8 @@
           }
         }
       })
-      .state('folders', {
-        url: '/folders/:folderId',
+      .state('folder', {
+        url: '/folder/:folderId',
         views: {
           'root': {
             templateUrl: '/views/files/list-files'

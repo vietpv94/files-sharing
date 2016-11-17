@@ -257,3 +257,24 @@ textarea {
     width: 900px;
   }
 }
+.badge-container {
+  padding-right: 0;
+
+  .composer-badge {
+    background: #2196F3;
+    top: 8px;
+    right: 11px;
+    font-weight: bold;
+    line-height: 16px;
+    height: 16px;
+    min-width: 16px;
+
+    &.error {
+      background: #F44336;
+    }
+  }
+
+  .uploading {
+    animation: flashing-desktop 2.5s infinite linear;
+  }
+}

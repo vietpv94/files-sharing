@@ -63,14 +63,16 @@ angular.module('dsp')
       .all('folders').post(folder);
   }
 
-  function getFolders() {
-    return dspRestangular.all('folders').getList().then(function(res) {
+  /*This fn will get list of folder created by user*/
+  function getFolders(userId) {
+    return dspRestangular.one('folders', userId).getList().then(function(res) {
       return Restangular.stripRestangular(res.data);
     });
   }
 
+  /*This fn will get a folder info by folder ID*/
   function getFolder(id) {
-    return dspRestangular.one('folders', id).get().then(function(res) {console.log(res.data)
+    return dspRestangular.one('folder', id).get().then(function(res) {
       return Restangular.stripRestangular(res.data);
     });
   }

@@ -13,8 +13,9 @@
       ul.nav.navbar-nav
         li(class=(title == 'Home') ? 'active' : undefined)
           a(ui-sref="home") Home
-        li(class=(title == 'Files Uploaded') ? 'active' : undefined)
-          a(ui-sref="my-files") Files Uploaded
+        if user
+          li(class=(title == 'Files Uploaded') ? 'active' : undefined)
+            a(ui-sref="my-files") Files Uploaded
         li(class=(title == 'About Team') ? 'active' : undefined)
           a(ui-sref="about") About Team
       ul.nav.navbar-nav.navbar-right

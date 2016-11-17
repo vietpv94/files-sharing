@@ -62,6 +62,9 @@ function create(req, res) {
   if (req.headers['content-type'] && req.headers['content-type'].indexOf('multipart/form-data') === 0) {
     var nb = 0;
     var busboy = new Busboy({ headers: req.headers });
+
+    req.pipe(busboy);
+    console.dir(req.headers['content-type']);
     busboy.once('file', function(fieldname, file) {
       nb++;
       return saveStream(file);
@@ -78,7 +81,6 @@ function create(req, res) {
         });
       }
     });
-    req.pipe(busboy);
 
   } else {
     return saveStream(req);
