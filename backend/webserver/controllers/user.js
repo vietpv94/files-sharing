@@ -83,18 +83,18 @@ exports.postSignup = (req, res, next) => {
     if (err) { return next(err); }
 
     if (existingUser) {
-      console.log(existingUser);
       return res.status(400).json({ error: { status: 400, message: 'Bad request', details: 'User is exist hoho!'}});
     }
     user.save((err) => {
       if (err) {
         return res.status(400).json({ error: { status: 400, message: 'Bad request', details: err.message}});
       }
+
       req.logIn(user, (err) => {
         if (err) { return next(err); }
-        userlogin.success(req.body.email, function(err, user) {
+        userlogin.success(req.body.username, function(err, user) {
           if (err) {
-            logger.error('Problem while setting login success for user ' + username, err);
+            logger.error('Problem while setting login success for user ' + req.body.username, err);
           }
 
           var result = {};

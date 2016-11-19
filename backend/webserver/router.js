@@ -33,7 +33,7 @@ module.exports = function (application) {
   application.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     (req, res) => {
-      res.redirect(req.session.returnTo || '/');
+      res.redirect('/');
     });
 
   const home = require('./controllers/home');

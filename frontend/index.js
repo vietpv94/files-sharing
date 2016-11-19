@@ -3,7 +3,7 @@
   angular.module('dsp', ['ui.router', 'mgcrea.ngStrap', 'ngFileUpload', 'dsp.session', 'dsp.http', 'dsp.file'])
   .constant('_', window._)
   .config(function($urlRouterProvider, $stateProvider, $locationProvider) {
-    $urlRouterProvider.otherwise('/home');
+    $urlRouterProvider.when('/', '/home');
 
     $stateProvider
       .state('home', {

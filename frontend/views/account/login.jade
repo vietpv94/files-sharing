@@ -21,6 +21,6 @@ form(name='form')
         hr
     .form-group
       .col-sm-offset-3.col-sm-7
-        a.btn.btn-block.btn-google.btn-social(href='/auth/google')
+        a.btn.btn-block.btn-google.btn-social(href='/auth/google', ng-click="reload()")
           i.fa.fa-google-plus
           | Sign in with Google

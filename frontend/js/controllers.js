@@ -2,11 +2,20 @@
 
 angular.module('dsp')
 
+.controller('headerCtrl', function($window, $scope) {
+  $scope.reload = function() {
+    $window.location.reload();
+  };
+})
 .controller('login', function($scope, $window, loginAPI, $state, SessionService) {
   $scope.loginIn = false;
 
   $scope.loginTask = {
     running: false
+  };
+
+  $scope.reload = function() {
+    $window.location.reload();
   };
 
   $scope.login = function(form) {
@@ -41,7 +50,7 @@ angular.module('dsp')
   $scope.isRegister = false;
 })
 
-.controller('signup', function($scope, $window, $state, signupAPI) {
+.controller('signup', function($scope, $window, $state, signupAPI, SessionService) {
   $scope.loginIn = false;
   $scope.signupTask = {
     running: false
@@ -54,7 +63,7 @@ angular.module('dsp')
     $scope.signupTask.running = true;
 
     signupAPI.create($scope.settings).then(
-      function() {
+      function(user) {
         $scope.loginIn = true;
         $scope.signupTask.running = false;
         SessionService.set('user', JSON.stringify(user.data));

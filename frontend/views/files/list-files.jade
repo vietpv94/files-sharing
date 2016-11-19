@@ -14,4 +14,5 @@ div(ng-controller="listFilesController as ctrl")
           .panel.panel-default
             .panel-body
               img(fallback-src="/images/file-icons/default.png", src="/images/file-icons/default.png", ng-src="/images/file-icons/{{ ::file.contentType | extension }}.png", alt='file')
-              |  {{ ::file.filename }}
+              p(style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis")
+                |  {{ ::file.filename }}
