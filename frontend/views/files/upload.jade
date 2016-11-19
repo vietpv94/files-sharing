@@ -1,14 +1,28 @@
 .page-header
   h2
     i.fa.fa-upload
-    | File Upload
-h3 File Upload Form
-.row(ng-controller="uploadController as ctrl")
-  .col-sm-6
-    form(name="form")
-      .form-group
-        label.control-label File Input
-        button.btn.btn-primary(type='button', ngf-select="ctrl.onFilesSelect($files)", ngf-multiple="true") Choose File
-          .badge-container
-            .badge.composer-badge(ng-hide='fileUploadStatus.number === 0', ng-class="{ error: fileUploadStatus.error }")
-            div(ng-class="{ uploading: fileUploadStatus.uploading }")
+    | File Upload Form
+.row(ng-controller="uploadFileController as ctrl")
+
+  a.btn.btn-success(style="align: center", type='file', ngf-select="ctrl.onFilesSelect($files)", ngf-multiple="true")
+    i.fa.fa-upload
+    | Upload File
+  hr
+  .files(ng-if="folder.files.length > 0")
+    .clickable.file(ng-click="$event.stopPropagation()", ng-repeat="file in folder.files | orderBy:'-'", ng-if="::!file.isInline", ng-class="file.status", name="file-{{$index}}")
+      .col-md-6
+        .card
+          .panel.panel-default
+            .panel-body
+              .progress(ng-if="file.status === 'uploading'", style="position: absolute; width: 0; height: 100%; z-index: 1; background-color: #fff;", ng-style="{ width: file.upload.progress + '%' }")
+              .icon(ng-switch='file.status')
+                img(ng-switch-when="error", src="/images/exclamation.svg", alt='Error')
+                img(ng-switch-when="uploading", src="/images/upload.svg", alt='Uploading')
+                img(ng-switch-default, fallback-src="/images/file-icons/default.png", src="/images/file-icons/default.png", ng-src="/images/file-icons/{{ ::file.type | extension }}.png", alt='File')
+                |  {{ ::file.name }}
+                .secondary-metadata(ng-switch="file.status")
+                  .retry(ng-switch-when="error") Upload failed.
+                    a(href="", ng-click="ctrl.upload(file)") Retry
+                  .size(ng-switch-default) {{ ::file.size | bytes }}
+              .actions
+                a(ng-click="$event.stopPropagation(); ctrl.removeFile(file)") Delete

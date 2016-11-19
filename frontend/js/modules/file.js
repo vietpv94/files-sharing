@@ -5,9 +5,9 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
   .constant('FILES_API_URL', '/api/files')
   .constant('DEFAULT_FILE_TYPE', 'application/octet-stream')
 
-  .factory('fileUploadService', function($q, $timeout, $log, fileAPIService, FILES_API_URL, DEFAULT_FILE_TYPE) {
+  .factory('fileUploadService', function($q, $timeout, fileAPIService, FILES_API_URL, DEFAULT_FILE_TYPE) {
 
-    function get() {
+    function get(id) {
       var date = Date.now();
       var tracker = [];
       var processed = 0;
@@ -24,15 +24,15 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
 
       function await(done, error, progress) {
         done = done || function(result) {
-            $log.debug('Tasks are complete:', result);
+            console.log('Tasks are complete:', result);
           };
 
         error = error || function(err) {
-            $log.debug('Error while processing tasks:', err);
+            console.log('Error while processing tasks:', err);
           };
 
         progress = progress || function(evt) {
-            $log.debug('Tasks progress:', evt);
+            console.log('Tasks progress:', evt);
           };
 
         return $q.all(tracker).then(done, error, progress);
@@ -88,7 +88,7 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
             task.response = response;
 
             return task.defer.resolve(task);
-          }, task.defer.reject, function(evt) {
+          }, task.defer.reject, function(evt) {console.log(evt)
             task.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
 
             return task.defer.notify(task);
@@ -124,31 +124,42 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
       get: get
     };
   })
-  .factory('fileAPIService', function(Upload, dspRestangular) {
-    function uploadBlob(url, blob, mime, size, canceler) {
+  .factory('fileAPIService', function($q, $rootScope, Upload, getFolder, xhrWithUploadProgress, dspRestangular) {
+    function _inApply(fn) {
+      return function(value) {
+        if ($rootScope.$$phase) {
+          return fn(value);
+        }
+
+        return $rootScope.$apply(function() {
+          fn(value);
+        });
+      };
+    }
+    function uploadFile(url, file, mime, size, options, canceler) {
+      var params = {mimetype: mime, size: size, name: file.name, folderId: getFolder.id};
+      var defer = $q.defer();
+      if (options) {
+        angular.extend(params, options);
+      }
       return Upload.http({
         method: 'POST',
         url: url,
         headers: {'Content-Type': mime},
-        data: blob,
-        params: {mimetype: mime, size: size},
-        withCredentials: true,
-        timeout: canceler
-      });
-    }
-
-    function uploadFile(url, file, mime, size, options, canceler) {
-      var params = {mimetype: mime, size: size, name: file.name};
-      if (options) {
-        angular.extend(params, options);
-      }
-      return Upload.upload({
-        method: 'POST',
-        url: url,
         file: file,
+        data: {},
         params: params,
         withCredentials: true,
-        timeout: canceler
+        timeout: canceler,
+        success: _inApply(defer.resolve),
+        error: function(xhr, status, error) {
+          _inApply(defer.reject)({
+            xhr: xhr,
+            status: status,
+            error: error
+          });
+        },
+        xhr: xhrWithUploadProgress(_inApply(defer.notify))
       });
     }
 
@@ -157,9 +168,27 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
     }
 
     return {
-      uploadBlob: uploadBlob,
       uploadFile: uploadFile,
       remove: remove
+    };
+  })
+  .service('XMLHttpRequest', function($window) {
+    return $window.XMLHttpRequest;
+  })
+
+  .factory('getFolder', function($stateParams) {
+    return {id: $stateParams.folderId};
+  })
+
+  .factory('xhrWithUploadProgress', function(XMLHttpRequest) {
+    return function(callback) {
+      return function() {
+        var xhr = new XMLHttpRequest();
+
+        xhr.upload.addEventListener('progress', callback);
+
+        return xhr;
+      };
     };
   })
   .factory('contentTypeService', function() {
@@ -337,5 +366,26 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
   .filter('extension', function(contentTypeService) {
     return function(contentType) {
       return contentTypeService.getExtension(contentType);
+    };
+  })
+  .filter('bytes', function() {
+    return function(bytes, precision) {
+      if (bytes === 0) {
+        return '0 bytes';
+      }
+
+      if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) {
+        return '-';
+      }
+
+      if (typeof precision === 'undefined') {
+        precision = 1;
+      }
+
+      var units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'],
+        number = Math.floor(Math.log(bytes) / Math.log(1024)),
+        val = (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision);
+
+      return (val.match(/\.0*$/) ? val.substr(0, val.indexOf('.')) : val) + '' + units[number];
     };
   });

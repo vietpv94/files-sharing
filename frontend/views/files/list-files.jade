@@ -1,7 +1,17 @@
-.page-header(ng-controller="listFilesController as ctrl")
-  h2
-    i.fa.fa-book
-    |  {{ ctrl.folder.name }}
-    a.btn.btn-success(style="float: right", ng-click="ctrl.uploadFile()")
-      i.fa.fa-upload
-      | Upload File
+div(ng-controller="listFilesController as ctrl")
+  .page-header
+    h2
+      i.fa.fa-book
+      |  {{ folder.name }}
+      a.btn.btn-success(style="float: right", ng-click="ctrl.uploadFile()")
+        i.fa.fa-upload
+        | Upload File
+  p.warning {{message}}
+  div(ng-repeat="file in files")
+    .col-xs-4
+      .clickable.file(ng-click="ctrl.download(file)")
+        .card
+          .panel.panel-default
+            .panel-body
+              img(fallback-src="/images/file-icons/default.png", src="/images/file-icons/default.png", ng-src="/images/file-icons/{{ ::file.contentType | extension }}.png", alt='file')
+              |  {{ ::file.filename }}

@@ -127,32 +127,45 @@ angular.module('dsp')
   }
 })
 
-.controller('listFilesController', function($stateParams, $state, folderAPI) {
+.controller('listFilesController', function($scope, $stateParams, $state, folderAPI, filesAPI) {
   var folderId = $stateParams.folderId;
   var self = this;
 
-  folderAPI.getFolder(folderId).then(function(data) {
-    self.folder = data;
+  filesAPI.getFiles(folderId).then(function(data) {console.log(data)
+    $scope.files = data || [];
+  }, function(err) {
+    console.log(err);
   });
 
+  folderAPI.getFolder(folderId).then(function(data) {
+    $scope.folder = data || {};
+  });
+
+
   self.uploadFile = function() {
-    $state.go('upload');
+    $state.go('upload', { folderId: folderId });
+  };
+
+
+  $scope.message = "";
+  self.download = function(file) {
+    $scope.message = "download file " +file.filename + " unavailable now, sorry!"
   }
 })
 
-.controller('uploadController', function($scope, $stateParams, fileUploadService, _, DEFAULT_FILE_TYPE) {
-
+.controller('uploadFileController', function($scope, fileUploadService, _, DEFAULT_FILE_TYPE) {
+  var self = this;
   var UPLOADING = 'uploading';
   var ERROR = 'error';
   var UPLOADED = 'uploaded';
   var MAX_SIZE_UPLOAD_BYTES = 10*1024*1024;
-  var self = this;
+  $scope.folder = {};
 
   function _updateFileUploadStatus() {
     $scope.fileUploadStatus = {
-      number: _.filter($scope.files, {isInline: false}).length,
-      uploading: _.some($scope.files, {status: UPLOADING}),
-      error: _.some($scope.files, {status: ERROR})
+      number: _.filter($scope.folder.files, {isInline: false}).length,
+      uploading: _.some($scope.folder.files, {status: UPLOADING}),
+      error: _.some($scope.folder.files, {status: ERROR})
     }
   }
 
@@ -185,7 +198,7 @@ angular.module('dsp')
       return;
     }
 
-    $scope.files = $scope.files || []; //never undefined
+    $scope.folder.files = $scope.folder.files || []; //never undefined
 
     _.forEach($files, function(file) {
       if (file.size > MAX_SIZE_UPLOAD_BYTES) {
@@ -198,19 +211,18 @@ angular.module('dsp')
         type: file.type || DEFAULT_FILE_TYPE
       };
 
-      $scope.files.push(fileStore);
+      $scope.folder.files.push(fileStore);
       self.upload(fileStore);
     });
   };
 
   function _cancelFile(file) {
     file.upload && file.upload.cancel();
-    _updateAttachmentStatus();
+    _updateFileUploadStatus();
   }
 
   self.removeFile= function(file) {
-    _.pull($scope.files, file);
+    _.pull($scope.folder.files, file);
     _cancelFile(file);
   };
 });
-

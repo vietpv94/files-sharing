@@ -82,4 +82,16 @@ angular.module('dsp')
     getFolders: getFolders,
     getFolder: getFolder
   }
+})
+
+.factory('filesAPI', function(dspRestangular, Restangular) {
+  function getFiles(folderId) {
+    return dspRestangular.one('files', folderId).get().then(function(res) {console.log(res)
+      return Restangular.stripRestangular(res.data);
+    });
+  }
+
+  return {
+    getFiles: getFiles
+  }
 });

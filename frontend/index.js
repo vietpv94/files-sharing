@@ -31,7 +31,7 @@
         }
       })
       .state('upload', {
-        url: '/upload',
+        url: '/upload/:folderId',
         views: {
           'root': {
             templateUrl: '/views/files/upload'

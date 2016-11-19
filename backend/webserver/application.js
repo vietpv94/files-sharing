@@ -1,7 +1,6 @@
 const express = require('express');
 const compression = require('compression');
 const session = require('express-session');
-const bodyParser = require('body-parser');
 const logger = require('morgan');
 const lusca = require('lusca');
 const flash = require('express-flash');
@@ -24,30 +23,29 @@ exports = module.exports = app;
 /**
  * Express configuration.
  */
-app.set('port', process.env.PORT || 3000);
+
 app.set('views', FRONTEND_PATH + '/views');
 app.set('view engine', 'jade');
-app.get('/views/*', function(req, res) {
-    var templateName = req.params[0].replace(/\.html$/, '');
-    res.render(templateName, { basedir: FRONTEND_PATH + '/views' });
-  }
-);
-app.locals.pretty = true;
+
+app.use(logger('dev'));
 
 app.use('/components', express.static(FRONTEND_PATH + '/components'));
 app.use('/js', express.static(FRONTEND_PATH + '/js'));
+app.use('/css', express.static(FRONTEND_PATH + '/css'));
 app.use('/modules', express.static(FRONTEND_PATH + '/modules'));
 
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({
-  src: FRONTEND_PATH,
+  src: FRONTEND_PATH + '/css',
   dest: FRONTEND_PATH
 }));
-app.use(logger('dev'));
+
+const bodyParser = require('body-parser');
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(expressValidator());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 var sessionMiddleware = cdm(session({
   resave: false,
@@ -85,4 +83,10 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(express.static(FRONTEND_PATH, { maxAge: 31557600000 }));
+
+app.get('/views/*', function(req, res) {
+    var templateName = req.params[0].replace(/\.html$/, '');
+    res.render(templateName, { basedir: FRONTEND_PATH + '/views' });
+  }
+);
 require('./router')(app);

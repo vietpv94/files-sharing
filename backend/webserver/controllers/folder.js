@@ -9,14 +9,16 @@ exports.create = (req, res, next) => {
     name: req.body.name
   });
 
-  Folders.findOne({ name: req.body.name }, (err, existFolder) => {
+  const userId = mongoose.Types.ObjectId(req.body.userId);
+
+  Folders.findOne({ name: req.body.name , userId: userId}, (err, existFolder) => {
     if (err) {
       return next(err);
     }
 
     folder.name = existFolder ? req.body.name + '(copy) ' + req.body.createdAt : req.body.name;
 
-    folder.userId = mongoose.Types.ObjectId(req.body.userId);
+    folder.userId = userId;
     folder.save((err, saved) => {
       if (err) {
         return next(err);

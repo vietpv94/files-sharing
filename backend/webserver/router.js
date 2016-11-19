@@ -22,6 +22,10 @@ module.exports = function (application) {
   application.get('/api/folder/:folderId', authMiddleware.isAuthenticated, folder.getFolders);
   application.get('/api/folders/:uuid', authMiddleware.isAuthenticated, folder.get);
 
+  const files = require('./controllers/files');
+
+  application.get('/api/files/:folderId', authMiddleware.isAuthenticated, files.getFiles);
+
   const passport = require('passport');
 
   application.get('/auth/google',

@@ -2,7 +2,8 @@
 
 var files = require('../../core/files');
 var Busboy = require('busboy');
-var ObjectId = require('mongoose').Types.ObjectId;
+var mongoose = require('mongoose');
+var ObjectId = mongoose.Types.ObjectId;
 
 function create(req, res) {
   var size = parseInt(req.query.size, 10);
@@ -17,21 +18,22 @@ function create(req, res) {
   var fileId = new ObjectId();
   var options = {};
   var metadata = {};
+
   if (req.query.name) {
     options.filename = req.query.name;
   }
 
   if (req.user) {
-    metadata.creator = {objectType: 'user', id: req.user._id};
+    metadata.creator = {objectType: 'user', id: req.user._id, folderId: mongoose.Types.ObjectId(req.query.folderId)};
   }
 
-  var saveStream = function(stream) {
+  var saveStream = (stream) => {
     var interrupted = false;
-    req.on('close', function(err) {
+    req.on('close', (err) => {
       interrupted = true;
     });
 
-    return files.store(fileId, req.query.mimetype, metadata, stream, options, function(err, saved) {
+    return files.store(fileId, req.query.mimetype, metadata, stream, options, (err, saved) => {
       if (err) {
         return res.status(500).json({
           error: {
@@ -42,8 +44,8 @@ function create(req, res) {
         });
       }
 
-      if (saved.length !== size || interrupted) {
-        return files.delete(fileId, function(err) {
+      if (interrupted) {
+        return files.delete(fileId, (err) => {
           res.status(412).json({
             error: {
               code: 412,
@@ -61,11 +63,11 @@ function create(req, res) {
 
   if (req.headers['content-type'] && req.headers['content-type'].indexOf('multipart/form-data') === 0) {
     var nb = 0;
-    var busboy = new Busboy({ headers: req.headers });
+    var busboy = new Busboy({
+      headers: req.headers
+    });
 
-    req.pipe(busboy);
-    console.dir(req.headers['content-type']);
-    busboy.once('file', function(fieldname, file) {
+    busboy.on('file', (fieldname, file) => {console.log(fieldname)
       nb++;
       return saveStream(file);
     });
@@ -81,22 +83,23 @@ function create(req, res) {
         });
       }
     });
+    req.pipe(busboy);
 
   } else {
     return saveStream(req);
   }
 }
 
-function get(req, res) {
-  if (!req.params.id) {
+function getFiles(req, res) {
+  if(!req.params.folderId) {
     return res.status(400).json({
       error: 400,
-      message: 'Bad Request',
-      details: 'Missing id parameter'
+      message: 'Bad request',
+      details: 'Missing folderId parameter'
     });
   }
 
-  files.get(req.params.id, function(err, fileMeta, readStream) {
+  files.find({'metadata.creator.folderId': new ObjectId(req.params.folderId) }, (err, files) => {
     if (err) {
       return res.status(503).json({
         error: 503,
@@ -104,63 +107,44 @@ function get(req, res) {
         details: err.message || err
       });
     }
-
-    if (!readStream) {
-      if (req.accepts('html')) {
-        res.status(404).end();
-        return res.render('commons/404', { url: req.url });
-      } else {
-        return res.status(404).json({
-          error: 404,
-          message: 'Not Found',
-          details: 'Could not find file'
-        });
-      }
+    if (files && files.length > 0) {
+      res.status(200).json(files)
     }
 
-    if (fileMeta) {
-      var modSince = req.get('If-Modified-Since');
-      var clientMod = new Date(modSince);
-      var serverMod = fileMeta.uploadDate;
-      clientMod.setMilliseconds(0);
-      serverMod.setMilliseconds(0);
-
-      if (modSince && clientMod.getTime() === serverMod.getTime()) {
-        return res.status(304).end();
-      } else {
-        res.set('Last-Modified', fileMeta.uploadDate);
-      }
-
-      res.type(fileMeta.contentType);
-
-      if (fileMeta.filename) {
-        res.set('Content-Disposition', 'inline; filename="' +
-          fileMeta.filename.replace(/"/g, '') + '"');
-      }
-
-      if (fileMeta.length) {
-        res.set('Content-Length', fileMeta.length);
-      }
-    }
-
-    res.status(200);
-    return readStream.pipe(res);
   });
 }
 
 function remove(req, res) {
   if (!req.params.id) {
-    return res.status(400).json({error: {code: 400, message: 'Bad request', details: 'Missing id parameter'}});
+    return res.status(400).json({
+      error: {
+        code: 400,
+        message: 'Bad request',
+        details: 'Missing id parameter'
+      }
+    });
   }
   var meta = req.fileMeta;
 
   if (meta.metadata.referenced) {
-    return res.status(409).json({error: {code: 409, message: 'Conflict', details: 'File is used and can not be deleted'}});
+    return res.status(409).json({
+      error: {
+        code: 409,
+        message: 'Conflict',
+        details: 'File is used and can not be deleted'
+      }
+    });
   }
 
-  files.delete(req.params.id, function(err) {
+  files.delete(req.params.id, (err) => {
     if (err) {
-      return res.status(500).json({error: {code: 500, message: 'Server Error', details: err.message || err}});
+      return res.status(500).json({
+        error: {
+          code: 500,
+          message: 'Server Error',
+          details: err.message || err
+        }
+      });
     }
     return res.status(204).end();
   });
@@ -168,6 +152,6 @@ function remove(req, res) {
 
 module.exports = {
   create: create,
-  get: get,
+  getFiles: getFiles,
   remove: remove
 };
