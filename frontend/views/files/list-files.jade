@@ -6,13 +6,38 @@ div(ng-controller="listFilesController as ctrl")
       a.btn.btn-success(style="float: right", ng-click="ctrl.uploadFile()")
         i.fa.fa-upload
         | Upload File
-  p.warning {{message}}
-  div(ng-repeat="file in files")
-    .col-xs-4
-      .clickable.file(ng-click="ctrl.download(file)")
+  div(ng-show="files.length == 0 && !folder.childrenFolder", style="text-align: center")
+    i.mdi.mdi-folder-outline(style="font-size: 20em; color: #d6d31d")
+    div(style="margin-top: -90px; font-size: 20px;")
+      |  This folder is empty
+  .row
+    div(ng-repeat="child in folder.childrenFolder")
+      file-folder(folder="child")
+  .row
+    div(ng-repeat="file in files")
+      .col-md-4.col-xs-12.col-sm-6
         .card
           .panel.panel-default
+            .lv-actions.actions(style="list-style: none; padding: 0; margin: 0;")
+              li.dropdown
+                a(href='', data-toggle='dropdown', aria-expanded='true',style="float: right; background: #fff; border: none;")
+                  i.mdi.mdi-dots-vertical(style="font-size: 2em; color: #948b8b;")
+                ul.dropdown-menu.dropdown-menu-right(style="position: absolute; top: 30px; right: 10px; border-radius: 0;")
+                  li(style="padding: 5px;")
+                    a(href="", ng-click="ctrl.download(file)")
+                      i.mdi.mdi-download
+                      |  Download
+                  li(style="padding: 5px;")
+                    a(href="")
+                      i.mdi.mdi-eye
+                      |  View
+                  li(style="padding: 5px;")
+                    a(href="", ng-click="ctrl.deleteFile(file._id)")
+                      i.mdi.mdi-delete
+                      |  Delete
             .panel-body
               img(fallback-src="/images/file-icons/default.png", src="/images/file-icons/default.png", ng-src="/images/file-icons/{{ ::file.contentType | extension }}.png", alt='file')
               p(style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis")
                 |  {{ ::file.filename }}
+  button.btn.btn-floating.btn-mdb(ng-click="ctrl.addNewFolder()")
+    i.mdi.mdi-plus

@@ -10,13 +10,14 @@ exports.create = (req, res, next) => {
   });
 
   const userId = mongoose.Types.ObjectId(req.body.userId);
+  folder.parentId = req.body.parentId ? mongoose.Types.ObjectId(req.body.parentId) : null;
 
   Folders.findOne({ name: req.body.name , userId: userId}, (err, existFolder) => {
     if (err) {
       return next(err);
     }
 
-    folder.name = existFolder ? req.body.name + '(copy) ' + req.body.createdAt : req.body.name;
+    folder.name = existFolder ? req.body.name + '(' + existFolder.length + ')' : req.body.name;
 
     folder.userId = userId;
     folder.save((err, saved) => {
@@ -25,7 +26,16 @@ exports.create = (req, res, next) => {
       }
 
       if (saved) {
-        return res.status(201).end();
+        var childId = saved._id;
+        if (folder.parentId) {
+          Folders.findOneAndUpdate({ _id: folder.parentId }, { $addToSet: { childId: childId } }, { new: true }, function(err) {
+            if (!err) {
+              return res.status(201).end();
+            }
+          });
+        } else {
+          return res.status(201).end();
+        }
       }
 
       res.status(404).end();
@@ -53,7 +63,7 @@ exports.get = (req, res, next) => {
   });
 };
 
-exports.getFolders = (req, res) => {
+exports.getFolder = (req, res) => {
   var folderId = req.params.folderId;
   if (!folderId) {
     return res.status(400).json({

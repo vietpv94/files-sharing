@@ -86,12 +86,22 @@ angular.module('dsp')
 
 .factory('filesAPI', function(dspRestangular, Restangular) {
   function getFiles(folderId) {
-    return dspRestangular.one('files', folderId).get().then(function(res) {console.log(res)
+    return dspRestangular.one('files', folderId).get().then(function(res) {
       return Restangular.stripRestangular(res.data);
     });
   }
 
+  function get(id) {
+    return dspRestangular.one('files', id).get();
+  }
+
+  function remove(id) {
+    return dspRestangular.one('files', id).remove();
+  }
+
   return {
-    getFiles: getFiles
+    getFiles: getFiles,
+    get: get,
+    remove: remove
   }
 });

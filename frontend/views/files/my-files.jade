@@ -2,6 +2,10 @@ h2 My Files
 hr
 
 .row(ng-controller="myFileController as ctrl")
+  div(ng-show="ctrl.folders.length == 0", style="text-align: center")
+    i.mdi.mdi-folder-outline(style="font-size: 20em; color: #d6d31d")
+    div(style="margin-top: -90px; font-size: 20px;")
+      |  This folder is empty
   .list-folder(ng-repeat="folder in ctrl.folders")
     file-folder(folder="folder")
   button.btn.btn-floating.btn-mdb(ng-click="ctrl.addNewFolder()")

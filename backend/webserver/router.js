@@ -18,13 +18,13 @@ module.exports = function (application) {
   application.post('/reset/:token', user.postReset);
   const folder = require('./controllers/folder');
 
-  application.get('/api/folders', authMiddleware.isAuthenticated, folder.get);
-  application.get('/api/folder/:folderId', authMiddleware.isAuthenticated, folder.getFolders);
+  application.get('/api/folder/:folderId', authMiddleware.isAuthenticated, folder.getFolder);
   application.get('/api/folders/:uuid', authMiddleware.isAuthenticated, folder.get);
 
   const files = require('./controllers/files');
 
   application.get('/api/files/:folderId', authMiddleware.isAuthenticated, files.getFiles);
+  application.get('/api/files/:id', authMiddleware.isAuthenticated, files.get);
 
   const passport = require('passport');
 

@@ -7,7 +7,7 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
 
   .factory('fileUploadService', function($q, $timeout, fileAPIService, FILES_API_URL, DEFAULT_FILE_TYPE) {
 
-    function get(id) {
+    function get() {
       var date = Date.now();
       var tracker = [];
       var processed = 0;
@@ -88,7 +88,7 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
             task.response = response;
 
             return task.defer.resolve(task);
-          }, task.defer.reject, function(evt) {console.log(evt)
+          }, task.defer.reject, function(evt) {
             task.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
 
             return task.defer.notify(task);
@@ -142,7 +142,7 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
       if (options) {
         angular.extend(params, options);
       }
-      return Upload.http({
+      return Upload.upload({
         method: 'POST',
         url: url,
         headers: {'Content-Type': mime},
@@ -206,11 +206,15 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
       'application/xhtml+xml': 'xhtml',
       'application/xml': 'xml',
       'application/zip': 'zip',
-      'audio/adpcm': 'adp',
-      'audio/basic': 'au',
-      'audio/midi': 'mid',
+      'application/msword': 'doc',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'pptx',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
+      'application/vnd.openxmlformats-officedocument.presentationml.slide': 'sldx',
+      'application/vnd.openxmlformats-officedocument.presentationml.slideshow': 'ppsx',
+      'application/x-gzip': 'gz',
+      'application/pdf': 'pdf',
       'audio/mp4': 'mp4a',
-      'audio/mpeg': 'mpga',
       'audio/ogg': 'oga',
       'audio/webm': 'weba',
       'audio/x-flac': 'flac',
@@ -219,45 +223,23 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
       'audio/x-ms-wax': 'wax',
       'audio/x-ms-wma': 'wma',
       'audio/x-wav': 'wav',
-      'audio/xm': 'xm',
-      'image/bmp': 'bmp',
-      'image/cgm': 'cgm',
-      'image/g3fax': 'g3',
+      'audio/mp3': 'mp3',
       'image/gif': 'gif',
-      'image/ief': 'ief',
       'image/jpeg': 'jpeg',
-      'image/ktx': 'ktx',
       'image/png': 'png',
-      'image/prs.btif': 'btif',
       'image/sgi': 'sgi',
       'image/svg+xml': 'svg',
-      'image/tiff': 'tiff',
       'image/vnd.adobe.photoshop': 'psd',
       'image/vnd.dece.graphic': 'uvi',
       'image/vnd.dvb.subtitle': 'sub',
       'image/webp': 'webp',
       'image/x-icon': 'ico',
-      'image/x-mrsid-image': 'sid',
-      'image/x-pcx': 'pcx',
-      'image/x-pict': 'pic',
-      'image/x-rgb': 'rgb',
-      'image/x-tga': 'tga',
-      'image/x-xbitmap': 'xbm',
-      'image/x-xpixmap': 'xpm',
-      'image/x-xwindowdump': 'xwd',
-      'message/rfc822': 'eml',
-      'model/iges': 'igs',
-      'model/mesh': 'msh',
-      'model/vnd.collada+xml': 'dae',
       'model/vnd.dwf': 'dwf',
       'model/vnd.gdl': 'gdl',
       'model/vnd.gtw': 'gtw',
       'model/vnd.mts': 'mts',
       'model/vnd.vtu': 'vtu',
       'model/vrml': 'wrl',
-      'model/x3d+binary': 'x3db',
-      'model/x3d+vrml': 'x3dv',
-      'model/x3d+xml': 'x3d',
       'text/cache-manifest': 'appcache',
       'text/calendar': 'ics',
       'text/css': 'css',

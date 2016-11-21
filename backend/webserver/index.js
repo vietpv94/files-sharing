@@ -20,7 +20,7 @@ emitter.setMaxListeners(0);
 
 function start(callback) {
   if (!webserver.port) {
-    console.log('The webserver needs to be configured before it is started');
+    console.warn('The webserver needs to be configured before it is started');
     process.exit(1);
   }
   if (webserver.started) {

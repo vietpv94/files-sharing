@@ -1,8 +1,8 @@
-div
-  .col-xs-3
-    a(ng-click="$ctrl.viewInside($ctrl.folder._id)")
-      .card
-        .panel.panel-default
-          .panel-body(style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis")
-            i.fa.fa-folder-o
-            |  {{$ctrl.folder.name}}
+.col-md-4.col-xs-12.col-sm-6
+  a(ng-click="$ctrl.viewInside($ctrl.folder._id)")
+    .card
+      .panel.panel-default
+        i.fa.fa-times(style="float: right")
+        .panel-body(style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis")
+          i.fa.fa-folder-o
+          |  {{$ctrl.folder.name}}

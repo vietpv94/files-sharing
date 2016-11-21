@@ -86,12 +86,16 @@ angular.module('dsp')
   });
 })
 
-.controller('myFileController', function($modal, $scope, SessionService, folderAPI) {
+.controller('myFileController', function($modal, $scope, SessionService, folderAPI, _) {
   var self = this;
   var userId = JSON.parse(SessionService.get('user'))._id;
 
   folderAPI.getFolders(userId).then(function(folders) {
-    self.folders = folders;
+    self.folders = _.map(folders, function(folder) {
+      if (!folder.parentId) {
+        return folder;
+      }
+    }).filter(Boolean);
   });
 
   var addModal = $modal({
@@ -109,8 +113,9 @@ angular.module('dsp')
 
 })
 
-.controller('addFolderController', function(folderAPI, SessionService, $window) {
+.controller('addFolderController', function(folderAPI, $stateParams, SessionService, $window) {
   var self = this;
+  var folderId = $stateParams.folderId;
 
   self.folderName = "";
   var userId = JSON.parse(SessionService.get('user'))._id;
@@ -120,6 +125,7 @@ angular.module('dsp')
       var folder = {
         name: self.folderName,
         userId: userId,
+        parentId: folderId,
         createdAt: Date.now()
       };
       folderAPI.addFolder(folder);
@@ -136,30 +142,68 @@ angular.module('dsp')
   }
 })
 
-.controller('listFilesController', function($scope, $stateParams, $state, folderAPI, filesAPI) {
+.controller('listFilesController', function($scope, $stateParams, $state, $modal, folderAPI, filesAPI, _) {
   var folderId = $stateParams.folderId;
   var self = this;
 
-  filesAPI.getFiles(folderId).then(function(data) {console.log(data)
+  filesAPI.getFiles(folderId).then(function(data) {
     $scope.files = data || [];
   }, function(err) {
     console.log(err);
   });
 
   folderAPI.getFolder(folderId).then(function(data) {
-    $scope.folder = data || {};
+    if (data) {
+      $scope.folder = data;
+      if (data.childId && data.childId.length > 0) {
+        $scope.folder.childrenFolder = [];
+        _.map(data.childId, function(id) {
+          folderAPI.getFolder(id).then(function(dt) {
+            $scope.folder.childrenFolder.push(dt);
+          });
+        }).filter(Boolean);
+      }
+    }
   });
-
 
   self.uploadFile = function() {
     $state.go('upload', { folderId: folderId });
   };
 
+  self.download = function(file) {console.log(file._id)
+    filesAPI.get(file._id).then(function(res) {
+      console.log(res);
+    })
+  };
 
-  $scope.message = "";
-  self.download = function(file) {
-    $scope.message = "download file " +file.filename + " unavailable now, sorry!"
-  }
+  var comfirmModal = $modal({
+    templateUrl: '/views/files/confirm-delete-modal',
+    backdrop: 'static',
+    placement: 'center',
+    controllerAs: '$ctrl',
+    controller: 'listFilesController',
+    show: false
+  });
+
+  self.deleteFile = function(id) {
+    filesAPI.remove(id);
+    $state.reload();
+  };
+
+
+
+  var addModal = $modal({
+    templateUrl: '/views/files/add-folder-modal',
+    backdrop: 'static',
+    placement: 'center',
+    controllerAs: '$ctrl',
+    controller: 'addFolderController',
+    show: false
+  });
+
+  self.addNewFolder = function() {
+    addModal.$promise.then(addModal.show);
+  };
 })
 
 .controller('uploadFileController', function($scope, fileUploadService, _, DEFAULT_FILE_TYPE) {
@@ -167,7 +211,7 @@ angular.module('dsp')
   var UPLOADING = 'uploading';
   var ERROR = 'error';
   var UPLOADED = 'uploaded';
-  var MAX_SIZE_UPLOAD_BYTES = 10*1024*1024;
+  var MAX_SIZE_UPLOAD_BYTES = 100*1024*1024;
   $scope.folder = {};
 
   function _updateFileUploadStatus() {
@@ -214,14 +258,8 @@ angular.module('dsp')
         self.errorMessage = 'file\'s size exceeds the limit, please try again with file\'s size under 10Mb'
       }
 
-      var fileStore = {
-        name: file.name,
-        size: file.size,
-        type: file.type || DEFAULT_FILE_TYPE
-      };
-
-      $scope.folder.files.push(fileStore);
-      self.upload(fileStore);
+      $scope.folder.files.push(file);
+      self.upload(file);
     });
   };
 

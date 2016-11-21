@@ -67,7 +67,7 @@ function create(req, res) {
       headers: req.headers
     });
 
-    busboy.on('file', (fieldname, file) => {console.log(fieldname)
+    busboy.on('file', (fieldname, file) => {
       nb++;
       return saveStream(file);
     });
@@ -107,10 +107,11 @@ function getFiles(req, res) {
         details: err.message || err
       });
     }
-    if (files && files.length > 0) {
-      res.status(200).json(files)
+    if (files) {
+      return res.status(200).json(files)
     }
 
+    return res.status(404).end();
   });
 }
 
@@ -121,17 +122,6 @@ function remove(req, res) {
         code: 400,
         message: 'Bad request',
         details: 'Missing id parameter'
-      }
-    });
-  }
-  var meta = req.fileMeta;
-
-  if (meta.metadata.referenced) {
-    return res.status(409).json({
-      error: {
-        code: 409,
-        message: 'Conflict',
-        details: 'File is used and can not be deleted'
       }
     });
   }
@@ -150,8 +140,70 @@ function remove(req, res) {
   });
 }
 
+function get(req, res) {
+  if (!req.params.id) {
+    return res.status(400).json({
+      error: 400,
+      message: 'Bad Request',
+      details: 'Missing id parameter'
+    });
+  }
+
+  files.get(req.params.id, function(err, fileMeta, readStream) {
+    if (err) {
+      return res.status(503).json({
+        error: 503,
+        message: 'Server error',
+        details: err.message || err
+      });
+    }
+
+    if (!readStream) {
+      if (req.accepts('html')) {
+        res.status(404).end();
+        return res.render('commons/404', { url: req.url });
+      } else {
+        return res.status(404).json({
+          error: 404,
+          message: 'Not Found',
+          details: 'Could not find file'
+        });
+      }
+    }
+
+    if (fileMeta) {
+      var modSince = req.get('If-Modified-Since');
+      var clientMod = new Date(modSince);
+      var serverMod = fileMeta.uploadDate;
+      clientMod.setMilliseconds(0);
+      serverMod.setMilliseconds(0);
+
+      if (modSince && clientMod.getTime() === serverMod.getTime()) {
+        return res.status(304).end();
+      } else {
+        res.set('Last-Modified', fileMeta.uploadDate);
+      }
+
+      res.type(fileMeta.contentType);
+
+      if (fileMeta.filename) {
+        res.set('Content-Disposition', 'inline; filename="' +
+          fileMeta.filename.replace(/"/g, '') + '"');
+      }
+
+      if (fileMeta.length) {
+        res.set('Content-Length', fileMeta.length);
+      }
+    }
+
+    res.status(200);
+    return readStream.pipe(res);
+  });
+}
+
 module.exports = {
   create: create,
   getFiles: getFiles,
+  get: get,
   remove: remove
 };

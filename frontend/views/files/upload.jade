@@ -10,11 +10,11 @@
   hr
   .files(ng-if="folder.files.length > 0")
     .clickable.file(ng-click="$event.stopPropagation()", ng-repeat="file in folder.files | orderBy:'-'", ng-if="::!file.isInline", ng-class="file.status", name="file-{{$index}}")
-      .col-md-6
+      .col-md-6.col-xs-12
         .card
           .panel.panel-default
             .panel-body
-              .progress(ng-if="file.status === 'uploading'", style="position: absolute; width: 0; height: 100%; z-index: 1; background-color: #fff;", ng-style="{ width: file.upload.progress + '%' }")
+              .progress(ng-if="file.status === 'uploading'", style="position: absolute; width: 0; height: 5px; z-index: 1; background-color: #00acc1;", ng-style="{ width: file.upload.progress-10 + '%' }")
               .icon(ng-switch='file.status')
                 img(ng-switch-when="error", src="/images/exclamation.svg", alt='Error')
                 img(ng-switch-when="uploading", src="/images/upload.svg", alt='Uploading')
