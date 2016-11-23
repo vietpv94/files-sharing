@@ -1,8 +1,20 @@
 .col-md-4.col-xs-12.col-sm-6
-  a(ng-click="$ctrl.viewInside($ctrl.folder._id)")
-    .card
-      .panel.panel-default
-        i.fa.fa-times(style="float: right")
-        .panel-body(style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis")
+  .card
+    .panel.panel-default
+      .lv-actions.actions(style="list-style: none; padding: 0; margin: 0;")
+        li.dropdown
+          a(href='', data-toggle='dropdown', aria-expanded='true',style="float: right; background: #fff; border: none;")
+            i.mdi.mdi-dots-vertical(style="font-size: 2em; color: #948b8b;")
+          ul.dropdown-menu.dropdown-menu-right(style="position: absolute; top: 20px; right: 15px; border-radius: 0;")
+            li(style="padding: 5px;")
+              a(href="", ng-click="$ctrl.rename($ctrl.folder._id)")
+                i.mdi.mdi-rename-box
+                |  Rename
+            li(style="padding: 5px;")
+              a(href="", ng-click="$ctrl.deleteFolder($ctrl.folder._id)")
+                i.mdi.mdi-delete
+                |  Delete
+      .panel-body(style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis")
+        a(ng-click="$ctrl.viewInside($ctrl.folder._id)")
           i.fa.fa-folder-o
           |  {{$ctrl.folder.name}}

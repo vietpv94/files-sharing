@@ -95,18 +95,6 @@ module.exports.store = function(id, contentType, metadata, stream, options, call
   stream.pipe(writeStream);
 };
 
-function getMetas(id, callback) {
-  const mongoId = getMongoID(id);
-
-  if (!mongoId) {
-    return callback(new Error('ID is mandatory')); // have to pass folderId
-  }
-  const gfs = getGrid();
-  gfs.files.find({'metadata.container.id' : mongoId}, callback);
-}
-
-module.exports.getMetas = getMetas;
-
 function getMeta(id, callback) {
   const mongoId = getMongoID(id);
   if (!mongoId) {
@@ -156,7 +144,11 @@ function get(id, callback) {
       return callback();
     }
 
-    return callback(err, meta);
+    const gfs = getGrid();
+    const readstream = gfs.createReadStream({
+      _id: mongoId
+    });
+    return callback(err, meta, readstream);
   });
 }
 module.exports.get = get;

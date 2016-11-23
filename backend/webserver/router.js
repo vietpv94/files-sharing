@@ -24,7 +24,7 @@ module.exports = function (application) {
   const files = require('./controllers/files');
 
   application.get('/api/files/:folderId', authMiddleware.isAuthenticated, files.getFiles);
-  application.get('/api/files/:id', authMiddleware.isAuthenticated, files.get);
+  application.get('/api/file/:id', authMiddleware.isAuthenticated, files.get);
 
   const passport = require('passport');
 

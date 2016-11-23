@@ -7,6 +7,7 @@ angular.module('dsp')
     $window.location.reload();
   };
 })
+
 .controller('login', function($scope, $window, loginAPI, $state, SessionService) {
   $scope.loginIn = false;
 
@@ -134,15 +135,75 @@ angular.module('dsp')
   }
 })
 
-.controller('listFolderController', function($state) {
+.controller('listFolderController', function($state, $scope, $modal) {
   var self = this;
 
   self.viewInside = function(folderId) {
     $state.go('folder', { folderId: folderId });
+  };
+
+  self.rename = function(folderId) {
+    var scope = $scope.$new();
+    scope.folderId = folderId;
+
+    var addModal = $modal({
+      templateUrl: '/views/files/rename-modal',
+      backdrop: 'static',
+      placement: 'center',
+      controllerAs: '$ctrl',
+      controller: 'updateFolderController',
+      scope: scope,
+      show: false
+    });
+
+    addModal.$promise.then(addModal.show);
+  };
+
+  self.deleteFolder = function(folderId) {
+    var scope =  $scope.$new();
+    scope.fileId = folderId;
+    var comfirmModal = $modal({
+      templateUrl: '/views/files/confirm-delete-modal',
+      backdrop: 'static',
+      placement: 'center',
+      controllerAs: '$ctrl',
+      controller: 'removeFolderController',
+      scope: scope,
+      show: false
+    });
+
+    comfirmModal.$promise.then(comfirmModal.show);
+  }
+
+})
+.controller('removeFolderController', function($state, $scope, folderAPI) {
+  var id = $scope.fileId;
+  var self = this;
+
+  self.delete = function() {
+    folderAPI.remove(id).then(function() {
+      $state.reload();
+    });
+  };
+})
+.controller('updateFolderController', function($scope, $state, folderAPI) {
+  var self = this;
+  var id = $scope.folderId;
+
+  self.saveUpdate = function() {
+    var data = {
+      name: $scope.name
+    };
+
+    if (id) {
+      folderAPI.updateFolder(id, data).then(function() {
+        $state.reload();
+      });
+    }
   }
 })
 
-.controller('listFilesController', function($scope, $stateParams, $state, $modal, folderAPI, filesAPI, _) {
+.controller('listFilesController', function($window, $scope, $stateParams, $state, $modal, folderAPI, filesAPI, _) {
   var folderId = $stateParams.folderId;
   var self = this;
 
@@ -170,27 +231,21 @@ angular.module('dsp')
     $state.go('upload', { folderId: folderId });
   };
 
-  self.download = function(file) {console.log(file._id)
-    filesAPI.get(file._id).then(function(res) {
-      console.log(res);
-    })
-  };
-
-  var comfirmModal = $modal({
-    templateUrl: '/views/files/confirm-delete-modal',
-    backdrop: 'static',
-    placement: 'center',
-    controllerAs: '$ctrl',
-    controller: 'listFilesController',
-    show: false
-  });
-
   self.deleteFile = function(id) {
-    filesAPI.remove(id);
-    $state.reload();
+    var scope =  $scope.$new();
+    scope.fileId = id;
+    var comfirmModal = $modal({
+      templateUrl: '/views/files/confirm-delete-modal',
+      backdrop: 'static',
+      placement: 'center',
+      controllerAs: '$ctrl',
+      controller: 'removeFilesController',
+      scope: scope,
+      show: false
+    });
+
+    comfirmModal.$promise.then(comfirmModal.show);
   };
-
-
 
   var addModal = $modal({
     templateUrl: '/views/files/add-folder-modal',
@@ -204,9 +259,50 @@ angular.module('dsp')
   self.addNewFolder = function() {
     addModal.$promise.then(addModal.show);
   };
+
+  self.note = function(file) {
+    var scope = $scope.$new();
+    scope.metadata = file.metadata;
+    scope.fileId = file._id;
+
+    var addModal = $modal({
+      templateUrl: '/views/files/add-note-modal',
+      backdrop: 'static',
+      placement: 'center',
+      controllerAs: '$ctrl',
+      controller: 'addNoteController',
+      scope: scope,
+      show: false
+    });
+
+    addModal.$promise.then(addModal.show);
+  }
+})
+.controller('removeFilesController', function($scope, filesAPI, $state) {
+  var id = $scope.fileId;
+  var self = this;
+
+  self.delete = function() {
+    filesAPI.remove(id).then(function() {
+      $state.reload();
+    });
+  };
+})
+.controller('addNoteController', function($scope, filesAPI) {
+  var self = this;
+
+  self.saveNote = function() {
+    var metadata = {
+      metadata: {
+        note: $scope.metadata.note
+      }
+    };
+
+    filesAPI.update($scope.fileId, metadata);
+  }
 })
 
-.controller('uploadFileController', function($scope, fileUploadService, _, DEFAULT_FILE_TYPE) {
+.controller('uploadFileController', function($scope, $window, fileUploadService, _) {
   var self = this;
   var UPLOADING = 'uploading';
   var ERROR = 'error';
@@ -263,13 +359,7 @@ angular.module('dsp')
     });
   };
 
-  function _cancelFile(file) {
-    file.upload && file.upload.cancel();
-    _updateFileUploadStatus();
+  self.done = function() {
+    $window.history.back();
   }
-
-  self.removeFile= function(file) {
-    _.pull($scope.folder.files, file);
-    _cancelFile(file);
-  };
 });

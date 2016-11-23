@@ -7,6 +7,10 @@
   a.btn.btn-success(style="align: center", type='file', ngf-select="ctrl.onFilesSelect($files)", ngf-multiple="true")
     i.fa.fa-upload
     | Upload File
+  div(ng-show="folder.files.length > 0" style="float: right")
+    .btn.btn-default(ng-click="ctrl.done()")
+      i.mdi.mdi-check
+      | Done
   hr
   .files(ng-if="folder.files.length > 0")
     .clickable.file(ng-click="$event.stopPropagation()", ng-repeat="file in folder.files | orderBy:'-'", ng-if="::!file.isInline", ng-class="file.status", name="file-{{$index}}")
@@ -19,10 +23,9 @@
                 img(ng-switch-when="error", src="/images/exclamation.svg", alt='Error')
                 img(ng-switch-when="uploading", src="/images/upload.svg", alt='Uploading')
                 img(ng-switch-default, fallback-src="/images/file-icons/default.png", src="/images/file-icons/default.png", ng-src="/images/file-icons/{{ ::file.type | extension }}.png", alt='File')
-                |  {{ ::file.name }}
+                p(style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis", title="{{::file.filename}}")
+                  |  {{ ::file.name }}
                 .secondary-metadata(ng-switch="file.status")
                   .retry(ng-switch-when="error") Upload failed.
                     a(href="", ng-click="ctrl.upload(file)") Retry
                   .size(ng-switch-default) {{ ::file.size | bytes }}
-              .actions
-                a(ng-click="$event.stopPropagation(); ctrl.removeFile(file)") Delete

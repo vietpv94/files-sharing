@@ -44,7 +44,7 @@ function create(req, res) {
         });
       }
 
-      if (interrupted) {
+      if (saved.length !== size || interrupted) {
         return files.delete(fileId, (err) => {
           res.status(412).json({
             error: {
@@ -161,7 +161,7 @@ function get(req, res) {
     if (!readStream) {
       if (req.accepts('html')) {
         res.status(404).end();
-        return res.render('commons/404', { url: req.url });
+        return res.render('404', { url: req.url });
       } else {
         return res.status(404).json({
           error: 404,
@@ -201,9 +201,38 @@ function get(req, res) {
   });
 }
 
+function update(req, res) {
+  if (!req.params.id) {
+    return res.status(400).json({
+      error: 400,
+      message: 'Bad Request',
+      details: 'Missing id parameter'
+    });
+  }
+  if (!req.body) {
+    return res.status(400).json({error: 400, message: 'Bad Request', details: 'No value defined'});
+  }
+
+  var data = req.body;
+
+  files.addMeta(req.params.id, data, function(err) {
+    if (err) {
+      return res.status(500).json({
+        error: {
+          code: 500,
+          message: 'Server Error',
+          details: err.message || err
+        }
+      });
+    }
+
+    return res.status(201).end();
+  });
+}
 module.exports = {
   create: create,
   getFiles: getFiles,
   get: get,
+  update: update,
   remove: remove
 };

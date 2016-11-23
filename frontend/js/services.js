@@ -77,10 +77,20 @@ angular.module('dsp')
     });
   }
 
+  function updateFolder(id, data) {
+    return dspRestangular.one('folder', id).customPUT(data);
+  }
+
+  function remove(id) {
+    return dspRestangular.one('folder', id).remove();
+  }
+
   return {
     addFolder: addFolder,
     getFolders: getFolders,
-    getFolder: getFolder
+    getFolder: getFolder,
+    updateFolder: updateFolder,
+    remove: remove
   }
 })
 
@@ -92,16 +102,21 @@ angular.module('dsp')
   }
 
   function get(id) {
-    return dspRestangular.one('files', id).get();
+    return dspRestangular.one('file', id).get();
   }
 
   function remove(id) {
     return dspRestangular.one('files', id).remove();
   }
 
+  function update(id, data) {
+    return dspRestangular.one('file', id).customPUT(data);
+  }
+
   return {
     getFiles: getFiles,
     get: get,
-    remove: remove
+    remove: remove,
+    update: update
   }
 });

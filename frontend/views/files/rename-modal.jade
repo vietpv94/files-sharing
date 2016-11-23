@@ -1,0 +1,17 @@
+.modal
+  .modal-dialog
+    .modal-content(style="padding: 20px")
+      .body
+        h3.title Note
+        hr
+        .form-group
+          .input-group
+            span.input-group-addon
+              i.mdi.mdi-folder-plus
+            .fg-line
+              input.form-control(ng-model="name", placeholder='Type your note')
+        .footer
+          button.btn.btn-primary(ng-click="$ctrl.saveUpdate(); $hide()", ng-disabled="!name")
+            | Ok
+          button.btn.btn-link(ng-click="$hide()")
+            | Close

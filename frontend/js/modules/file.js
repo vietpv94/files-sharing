@@ -2,7 +2,7 @@
 
 angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
 
-  .constant('FILES_API_URL', '/api/files')
+  .constant('FILES_API_URL', '/api/file')
   .constant('DEFAULT_FILE_TYPE', 'application/octet-stream')
 
   .factory('fileUploadService', function($q, $timeout, fileAPIService, FILES_API_URL, DEFAULT_FILE_TYPE) {
@@ -217,12 +217,12 @@ angular.module('dsp.file', ['ngFileUpload', 'dsp.http'])
       'audio/mp4': 'mp4a',
       'audio/ogg': 'oga',
       'audio/webm': 'weba',
-      'audio/x-flac': 'flac',
-      'audio/x-matroska': 'mka',
-      'audio/x-mpegurl': 'm3u',
-      'audio/x-ms-wax': 'wax',
-      'audio/x-ms-wma': 'wma',
-      'audio/x-wav': 'wav',
+      'audio/flac': 'flac',
+      'audio/matroska': 'mka',
+      'audio/mpegurl': 'm3u',
+      'audio/ms-wax': 'wax',
+      'audio/ms-wma': 'wma',
+      'audio/wav': 'wav',
       'audio/mp3': 'mp3',
       'image/gif': 'gif',
       'image/jpeg': 'jpeg',
