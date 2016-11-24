@@ -1,6 +1,6 @@
 'use strict';
 
-  angular.module('dsp', ['ui.router', 'mgcrea.ngStrap', 'ngFileUpload', 'dsp.session', 'dsp.http', 'dsp.file'])
+  angular.module('dsp', ['ui.router', 'mgcrea.ngStrap', 'ngFileUpload', 'dsp.http', 'dsp.file'])
   .constant('_', window._)
   .config(function($urlRouterProvider, $stateProvider, $locationProvider) {
     $urlRouterProvider.when('/', '/home');

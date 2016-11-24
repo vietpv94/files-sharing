@@ -10,7 +10,7 @@ exports.create = (req, res, next) => {
     name: req.body.name
   });
 
-  const userId = mongoose.Types.ObjectId(req.body.userId);
+  const userId = mongoose.Types.ObjectId(req.user._id);
   folder.parentId = req.body.parentId ? mongoose.Types.ObjectId(req.body.parentId) : null;
 
   Folders.findOne({ name: req.body.name , userId: userId}, (err, existFolder) => {
@@ -45,7 +45,7 @@ exports.create = (req, res, next) => {
 };
 
 exports.get = (req, res, next) => {
-  const userId = req.params.uuid;
+  const userId = req.user._id;
 
   if (!userId) {
     return res.status(400).json({error: {code: 400, message: 'Bad parameters', details: 'User ID is missing'}});

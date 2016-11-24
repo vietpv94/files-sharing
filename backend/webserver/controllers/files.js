@@ -230,6 +230,36 @@ function update(req, res) {
   });
 }
 
+function provideReader(req, res) {
+  if (!req.params.id) {
+    return res.status(400).json({
+      error: 400,
+      message: 'Bad Request',
+      details: 'Missing id parameter'
+    });
+  }
+  if (!req.body) {
+    return res.status(400).json({error: 400, message: 'Bad Request', details: 'No value defined'});
+  }
+
+  var data = req.body;
+
+  files.addMeta(req.params.id, data, function(err) {
+    if (err) {
+      return res.status(500).json({
+        error: {
+          code: 500,
+          message: 'Server Error',
+          details: err.message || err
+        }
+      });
+    }
+
+    req.flash('info', { msg: `Successful sharing your file !` });
+    return res.status(201).end();
+  });
+}
+
 function getFilesShared(req, res) {
   const userId = req.user._id;
 
@@ -254,5 +284,6 @@ module.exports = {
   get: get,
   update: update,
   remove: remove,
-  getFilesShared: getFilesShared
+  getFilesShared: getFilesShared,
+  provideReader: provideReader
 };

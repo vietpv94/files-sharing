@@ -115,7 +115,7 @@ exports.postSignup = (req, res, next) => {
  * Profile page.
  */
 exports.profile = (req, res) => {
-  const uuid = req.params.uuid;
+  const uuid = req.user._id;
   if (!uuid) {
     return res.status(400).json({error: {code: 400, message: 'Bad parameters', details: 'User ID is missing'}});
   }
@@ -148,7 +148,7 @@ exports.profile = (req, res) => {
  */
 exports.getProfileByMail = (req, res) => {
 
-  const email = req.query.email;
+  const email = req.query.email;console.log(req)
   if (!email) {
     return res.status(400).json({error: {code: 400, message: 'Bad parameters', details: 'email is missing'}});
   }

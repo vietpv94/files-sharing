@@ -13,15 +13,15 @@ module.exports = function (application) {
   application.get('/logout', user.logout);
 
   application.post('/forgot', user.postForgot);
-  application.get('/api/profile/:uuid', authenMiddleware.isAuthenticated, user.profile);
+  application.get('/api/profile', authenMiddleware.isAuthenticated, user.profile);
 
   application.get('/reset/:token', user.getReset);
   application.post('/reset/:token', user.postReset);
   const folder = require('./controllers/folder');
 
   application.get('/api/folder/:folderId', authenMiddleware.isAuthenticated, folder.getFolder);
-  application.get('/api/folders/:uuid', authenMiddleware.isAuthenticated, folder.get);
-  application.get('/api/profile', authenMiddleware.isAuthenticated, user.getProfileByMail);
+  application.get('/api/folders', authenMiddleware.isAuthenticated, folder.get);
+  application.get('/api/user', authenMiddleware.isAuthenticated, user.getProfileByMail);
 
   const files = require('./controllers/files');
 

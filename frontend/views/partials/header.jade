@@ -14,12 +14,12 @@
         li(class=(title == 'Home') ? 'active' : undefined)
           a(ui-sref="home") Home
         if user
-          li(class=(title == 'Files Uploaded') ? 'active' : undefined)
-            a(ui-sref="my-files") Files Management
+          li(class=(title == 'My Files') ? 'active' : undefined)
+            a(ui-sref="my-files") My Files
           li(class=(title == 'Shared with me') ? 'active' : undefined)
             a(ui-sref="shared-with-me") Shared with me
-        li(class=(title == 'About Team') ? 'active' : undefined)
-          a(ui-sref="about") About Team
+        li(class=(title == 'About') ? 'active' : undefined)
+          a(ui-sref="about") About
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=(title == 'Login') ? 'active' : undefined)

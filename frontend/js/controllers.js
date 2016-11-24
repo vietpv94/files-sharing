@@ -8,7 +8,7 @@ angular.module('dsp')
   };
 })
 
-.controller('login', function($scope, $window, loginAPI, $state, SessionService) {
+.controller('login', function($scope, $window, loginAPI, $state) {
   $scope.loginIn = false;
 
   $scope.loginTask = {
@@ -27,10 +27,9 @@ angular.module('dsp')
     $scope.loginTask.running = true;
 
     loginAPI.login($scope.credentials).then(
-      function(user) {
+      function() {
         $scope.loginIn = true;
         $scope.loginTask.running = false;
-        SessionService.set('user', JSON.stringify(user.data));
         $state.go('home');
         $window.location.reload();
       },
@@ -51,7 +50,7 @@ angular.module('dsp')
   $scope.isRegister = false;
 })
 
-.controller('signup', function($scope, $window, $state, signupAPI, SessionService) {
+.controller('signup', function($scope, $window, $state, signupAPI) {
   $scope.loginIn = false;
   $scope.signupTask = {
     running: false
@@ -64,10 +63,9 @@ angular.module('dsp')
     $scope.signupTask.running = true;
 
     signupAPI.create($scope.settings).then(
-      function(user) {
+      function() {
         $scope.loginIn = true;
         $scope.signupTask.running = false;
-        SessionService.set('user', JSON.stringify(user.data));
         $state.go('home');
         $window.location.reload();
       },
@@ -79,19 +77,17 @@ angular.module('dsp')
   };
 })
 
-.controller('profile', function($scope, profileAPI, SessionService) {
-  var userId = JSON.parse(SessionService.get('user'))._id;
+.controller('profile', function($scope, profileAPI) {
 
-  profileAPI.getUser(userId).then(function(profile) {
+  profileAPI.getUser().then(function(profile) {
     $scope.user = profile;
   });
 })
 
-.controller('myFileController', function($modal, $scope, SessionService, folderAPI, _) {
+.controller('myFileController', function($modal, $scope, folderAPI, _) {
   var self = this;
-  var userId = JSON.parse(SessionService.get('user'))._id;
 
-  folderAPI.getFolders(userId).then(function(folders) {
+  folderAPI.getFolders().then(function(folders) {
     self.folders = _.map(folders, function(folder) {
       if (!folder.parentId) {
         return folder;
@@ -114,18 +110,16 @@ angular.module('dsp')
 
 })
 
-.controller('addFolderController', function(folderAPI, $stateParams, SessionService, $window) {
+.controller('addFolderController', function(folderAPI, $stateParams, $window) {
   var self = this;
   var folderId = $stateParams.folderId;
 
   self.folderName = "";
-  var userId = JSON.parse(SessionService.get('user'))._id;
 
   self.add = function() {
     if(self.folderName) {
       var folder = {
         name: self.folderName,
-        userId: userId,
         parentId: folderId,
         createdAt: Date.now()
       };
@@ -297,7 +291,7 @@ angular.module('dsp')
   }
 })
 
-.controller('sharingController', function($scope, $state, profileAPI, filesAPI) {
+.controller('sharingController', function($scope, $window, profileAPI, filesAPI, _) {
   var self = this;
 
   self.share = function() {
@@ -308,15 +302,18 @@ angular.module('dsp')
         }
         var readers = $scope.metadata.readers || [];
 
-        readers.push(user._id);
+        var isDuplicated = _.indexOf(readers, user._id) > -1;
+        if (!isDuplicated) {
+          readers.push(user._id);
+        }
         var metadata = {
           metadata: {
             readers:  readers
           }
         };
 
-        filesAPI.update($scope.fileId, metadata).then(function(){
-          $state.reload();
+        filesAPI.provideReader($scope.fileId, metadata).then(function(){
+          $window.location.reload();
         });
       });
   }

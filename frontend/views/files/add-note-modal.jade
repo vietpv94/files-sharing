@@ -11,7 +11,7 @@
             .fg-line
               input.form-control(ng-model="metadata.note", placeholder='Type your note')
         .footer
-          button.btn.btn-primary(ng-click="$ctrl.saveNote(); $hide()", ng-disabled="!metadata.note")
+          button.btn.btn-primary(ng-click="$ctrl.saveNote(); $hide()")
             | Ok
           button.btn.btn-link(ng-click="$hide()")
             | Close

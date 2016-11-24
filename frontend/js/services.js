@@ -41,9 +41,9 @@ angular.module('dsp')
 })
 
 .factory('profileAPI', function($q, Restangular, dspRestangular) {
-  function getUser(uuid) {
+  function getUser() {
     return dspRestangular
-      .one('profile', uuid).get().then(function(res) {
+      .one('profile').get().then(function(res) {
         if (res.status !== 200) {
           return $q.reject(res);
         }
@@ -53,11 +53,10 @@ angular.module('dsp')
   }
 
   function getUserByEmail(email) {
-    return dspRestangular.all('profile').customGET('', { email: email }).then(function(res) {
+    return dspRestangular.one('user').customGET('', { email: email }).then(function(res) {
       if (res.status !== 200) {
         return $q.reject(res);
       }
-console.log(res.data)
       return res.data;
   });
   }
@@ -75,8 +74,8 @@ console.log(res.data)
   }
 
   /*This fn will get list of folder created by user*/
-  function getFolders(userId) {
-    return dspRestangular.one('folders', userId).getList().then(function(res) {
+  function getFolders() {
+    return dspRestangular.all('folders').getList().then(function(res) {
       return Restangular.stripRestangular(res.data);
     });
   }
@@ -123,6 +122,9 @@ console.log(res.data)
   function update(id, data) {
     return dspRestangular.one('file', id).customPUT(data);
   }
+  function provideReader(id, data) {
+    return dspRestangular.all('file').one('shared', id).customPUT(data);
+  }
 
   function getFilesShared() {
     return dspRestangular.all('files').getList().then(function(res) {
@@ -135,6 +137,7 @@ console.log(res.data)
     get: get,
     remove: remove,
     update: update,
-    getFilesShared: getFilesShared
+    getFilesShared: getFilesShared,
+    provideReader: provideReader
   }
 });
