@@ -26,7 +26,7 @@ function getGrid() {
   return new Grid(mongoose.connection.db, mongoose.mongo);
 }
 
-module.exports.find = (query, callback) => {console.log(query)
+module.exports.find = (query, callback) => {
   var gfs = getGrid();
   gfs.files.find(query).toArray(function(err, meta) {
     if (err) {

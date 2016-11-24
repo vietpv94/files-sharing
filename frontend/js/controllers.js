@@ -73,7 +73,7 @@ angular.module('dsp')
       },
       function(err) {
         $scope.signupTask.running = false;
-        console.log(err);
+        $scope.failMessage = err.data.error.details;
       }
     );
   };
@@ -276,8 +276,52 @@ angular.module('dsp')
     });
 
     addModal.$promise.then(addModal.show);
+  };
+
+  self.share = function(file) {
+    var scope = $scope.$new();
+    scope.metadata = file.metadata;
+    scope.fileId = file._id;
+
+    var addModal = $modal({
+      templateUrl: '/views/files/add-sharing-people-modal',
+      backdrop: 'static',
+      placement: 'center',
+      controllerAs: '$ctrl',
+      controller: 'sharingController',
+      scope: scope,
+      show: false
+    });
+
+    addModal.$promise.then(addModal.show);
   }
 })
+
+.controller('sharingController', function($scope, $state, profileAPI, filesAPI) {
+  var self = this;
+
+  self.share = function() {
+    profileAPI.getUserByEmail($scope.metadata.reader)
+      .then(function(user) {
+        if (!user) {
+          return;
+        }
+        var readers = $scope.metadata.readers || [];
+
+        readers.push(user._id);
+        var metadata = {
+          metadata: {
+            readers:  readers
+          }
+        };
+
+        filesAPI.update($scope.fileId, metadata).then(function(){
+          $state.reload();
+        });
+      });
+  }
+})
+
 .controller('removeFilesController', function($scope, filesAPI, $state) {
   var id = $scope.fileId;
   var self = this;
@@ -362,4 +406,10 @@ angular.module('dsp')
   self.done = function() {
     $window.history.back();
   }
+})
+
+.controller('sharedFileController', function($scope, filesAPI) {
+  filesAPI.getFilesShared().then(function(files) {
+    $scope.files = files;
+  });
 });

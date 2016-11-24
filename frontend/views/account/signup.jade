@@ -2,6 +2,9 @@
   h3 Sign up
 form(name="form")
   .form-horizontal(ng-controller="signup")
+    .warning(style="text-align: center; color: #e40f0f; margin-bottom: 20px;")
+      |  {{failMessage}}
+
     .form-group
       label.col-sm-3.control-label(for='email') Email
       .col-sm-7

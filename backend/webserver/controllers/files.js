@@ -1,12 +1,12 @@
 'use strict';
 
-var files = require('../../core/files');
-var Busboy = require('busboy');
-var mongoose = require('mongoose');
-var ObjectId = mongoose.Types.ObjectId;
+const files = require('../../core/files');
+const Busboy = require('busboy');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 function create(req, res) {
-  var size = parseInt(req.query.size, 10);
+  const size = parseInt(req.query.size, 10);
   if (isNaN(size) || size < 1) {
     return res.status(400).json({
       error: 400,
@@ -15,9 +15,9 @@ function create(req, res) {
     });
   }
 
-  var fileId = new ObjectId();
-  var options = {};
-  var metadata = {};
+  const fileId = new ObjectId();
+  const options = {};
+  const metadata = {};
 
   if (req.query.name) {
     options.filename = req.query.name;
@@ -28,7 +28,7 @@ function create(req, res) {
   }
 
   var saveStream = (stream) => {
-    var interrupted = false;
+    let interrupted = false;
     req.on('close', (err) => {
       interrupted = true;
     });
@@ -62,8 +62,8 @@ function create(req, res) {
   };
 
   if (req.headers['content-type'] && req.headers['content-type'].indexOf('multipart/form-data') === 0) {
-    var nb = 0;
-    var busboy = new Busboy({
+    let nb = 0;
+    const busboy = new Busboy({
       headers: req.headers
     });
 
@@ -229,10 +229,30 @@ function update(req, res) {
     return res.status(201).end();
   });
 }
+
+function getFilesShared(req, res) {
+  const userId = req.user._id;
+
+  files.find({'metadata.readers': userId.toString()}, (err, files) => {
+    if (err) {
+      return res.status(503).json({
+        error: 503,
+        message: 'Server error',
+        details: err.message || err
+      });
+    }
+    if (files) {
+      return res.status(200).json(files)
+    }
+
+    return res.status(404).end();
+  });
+}
 module.exports = {
   create: create,
   getFiles: getFiles,
   get: get,
   update: update,
-  remove: remove
+  remove: remove,
+  getFilesShared: getFilesShared
 };

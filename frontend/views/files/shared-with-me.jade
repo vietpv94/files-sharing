@@ -1,0 +1,33 @@
+h2 Shared with me
+hr
+
+.row(ng-controller="sharedFileController as ctrl")
+  div(ng-show="files.length == 0", style="text-align: center")
+    i.mdi.mdi-folder-outline(style="font-size: 20em; color: #d6d31d")
+    div(style="margin-top: -90px; font-size: 20px;")
+      |  This folder is empty
+  .list-file(ng-repeat="file in files")
+    .col-md-4.col-xs-12.col-sm-6
+      .card
+        .panel.panel-default
+          .lv-actions.actions(style="list-style: none; padding: 0; margin: 0;")
+            li.dropdown
+              a(href='', data-toggle='dropdown', aria-expanded='true',style="float: right; background: #fff; border: none;")
+                i.mdi.mdi-dots-vertical(style="font-size: 2em; color: #948b8b;")
+              ul.dropdown-menu.dropdown-menu-right(style="position: absolute; top: 20px; right: 15px; border-radius: 0;")
+                li(style="padding: 5px;")
+                  a(href="/api/file/{{::file._id}}", target="_blank")
+                    i.mdi.mdi-eye
+                    |  View
+                li(style="padding: 5px;")
+                  a(href="/api/file/{{::file._id}}", download="file.filename", target="_self")
+                    i.mdi.mdi-download
+                    |  Download
+          .panel-body
+            .block-left(style="float: left; width: 50%")
+              img(fallback-src="/images/file-icons/default.png", src="/images/file-icons/default.png", ng-src="/images/file-icons/{{ ::file.contentType | extension }}.png", alt='file')
+              p(style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis", title="{{::file.filename}}")
+                |  {{ ::file.filename }}
+            .block-right(style="float: right; width: 50%")
+              p(ng-show="file.metadata.note", style="color: #e8bb06; height: 120px; width: 100%; overflow: hidden; text-overflow: ellipsis", title="{{file.metadata.note}}")
+                | NOTE: {{file.metadata.note}}

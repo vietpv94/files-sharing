@@ -1,0 +1,18 @@
+.modal
+  .modal-dialog
+    .modal-content(style="padding: 20px")
+      .body
+        h3.title Share with other
+        hr
+        h5.title People
+        .form-group
+          .input-group
+            span.input-group-addon
+              i.mdi.mdi-folder-plus
+            .fg-line
+              input.form-control(ng-model="metadata.reader", placeholder='Type email address')
+        .footer
+          button.btn.btn-primary(ng-click="$ctrl.share(); $hide()", ng-disabled="!metadata.reader")
+            | Done
+          button.btn.btn-link(ng-click="$hide()")
+            | Close

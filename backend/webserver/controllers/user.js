@@ -111,11 +111,11 @@ exports.postSignup = (req, res, next) => {
 };
 
 /**
- * GET /account
+ * GET /profile
  * Profile page.
  */
 exports.profile = (req, res) => {
-  var uuid = req.params.uuid;
+  const uuid = req.params.uuid;
   if (!uuid) {
     return res.status(400).json({error: {code: 400, message: 'Bad parameters', details: 'User ID is missing'}});
   }
@@ -136,7 +136,40 @@ exports.profile = (req, res) => {
         details: 'User ' + uuid + ' has not been found'
       });
     }
-    var result = user.toObject();
+    const result = user.toObject();
+    delete result.password;
+    return res.status(200).json(result);
+  });
+};
+
+/**
+ * GET /profile
+ * Get User by email.
+ */
+exports.getProfileByMail = (req, res) => {
+
+  const email = req.query.email;
+  if (!email) {
+    return res.status(400).json({error: {code: 400, message: 'Bad parameters', details: 'email is missing'}});
+  }
+
+  userModule.getUserByEmail(email, function(err, user) {
+    if (err) {
+      return res.status(500).json({
+        error: 500,
+        message: 'Error while loading user ' + email,
+        details: err.message
+      });
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        error: 404,
+        message: 'User not found',
+        details: 'User ' + email + ' has not been found'
+      });
+    }
+    const result = user.toObject();
     delete result.password;
     return res.status(200).json(result);
   });
@@ -217,23 +250,6 @@ exports.postDeleteAccount = (req, res, next) => {
   });
 };
 
-/**
- * GET /account/unlink/:provider
- * Unlink OAuth provider.
- */
-exports.getOauthUnlink = (req, res, next) => {
-  const provider = req.params.provider;
-  User.findById(req.user.id, (err, user) => {
-    if (err) { return next(err); }
-    user[provider] = undefined;
-    user.tokens = user.tokens.filter(token => token.kind !== provider);
-    user.save((err) => {
-      if (err) { return next(err); }
-      req.flash('info', { msg: `${provider} account has been unlinked.` });
-      res.redirect('/account');
-    });
-  });
-};
 
 /**
  * GET /reset/:token
@@ -262,7 +278,7 @@ exports.getReset = (req, res, next) => {
  * POST /reset/:token
  * Process the reset password request.
  */
-exports.postReset = (req, res, next) => {
+exports.postReset = (req, res) => {
   req.assert('password', 'Password must be at least 4 characters long.').len(4);
   req.assert('confirm', 'Passwords must match.').equals(req.body.password);
 
@@ -272,8 +288,6 @@ exports.postReset = (req, res, next) => {
     req.flash('errors', errors);
     return res.redirect('back');
   }
-
-
 
 };
 

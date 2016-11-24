@@ -52,8 +52,19 @@ angular.module('dsp')
       });
   }
 
+  function getUserByEmail(email) {
+    return dspRestangular.all('profile').customGET('', { email: email }).then(function(res) {
+      if (res.status !== 200) {
+        return $q.reject(res);
+      }
+console.log(res.data)
+      return res.data;
+  });
+  }
+
   return {
-    getUser: getUser
+    getUser: getUser,
+    getUserByEmail: getUserByEmail
   };
 })
 
@@ -113,10 +124,17 @@ angular.module('dsp')
     return dspRestangular.one('file', id).customPUT(data);
   }
 
+  function getFilesShared() {
+    return dspRestangular.all('files').getList().then(function(res) {
+      return Restangular.stripRestangular(res.data);
+    });
+  }
+
   return {
     getFiles: getFiles,
     get: get,
     remove: remove,
-    update: update
+    update: update,
+    getFilesShared: getFilesShared
   }
 });

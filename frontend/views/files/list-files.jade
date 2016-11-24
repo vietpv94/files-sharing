@@ -24,13 +24,13 @@ div(ng-controller="listFilesController as ctrl")
                   i.mdi.mdi-dots-vertical(style="font-size: 2em; color: #948b8b;")
                 ul.dropdown-menu.dropdown-menu-right(style="position: absolute; top: 20px; right: 15px; border-radius: 0;")
                   li(style="padding: 5px;")
-                    a(href="")
+                    a(href="", ng-click="ctrl.share(file)")
                       i.mdi.mdi-share
                       |  Share
                   li(style="padding: 5px;")
                     a(href="/api/file/{{::file._id}}", target="_blank")
                       i.mdi.mdi-eye
-                      | View
+                      |  View
                   li(style="padding: 5px;")
                     a(href="", ng-click="ctrl.note(file)")
                       i.mdi.mdi-comment-text-outline

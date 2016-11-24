@@ -2,11 +2,10 @@
   .modal-dialog
     .modal-content
       .modal-header
-        h4.modal-title Delete file?
-        |  {{file}}
+        h4.modal-title Delete file/folder !?
       .modal-body
         span
-          | This file will no longer exist after this action, are you sure ?
+          | This file/folder will no longer exist after this action, are you sure ?
       .modal-footer
         button.btn.btn-link(type="button", ng-click="$hide()") Cancel
         button.btn.btn-danger(type="button", ng-click="$ctrl.delete(); $hide()") Delete

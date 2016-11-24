@@ -1,13 +1,51 @@
+'use strict';
+
+const files = require('../../core/files');
+const _ = require('lodash');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 /**
  * Authorization Required middleware.
  */
 
 exports.isAuthorized = (req, res, next) => {
-  const provider = req.path.split('/').slice(-1)[0];
+  const user = req.user;
+  const fileId = req.params.id;
 
-  if (_.find(req.user.tokens, { kind: provider })) {
-    next();
-  } else {
-    res.redirect(`/auth/${provider}`);
-  }
+  files.getMeta(fileId, (err, meta) => {
+    if (err) {
+      return res.status(500).json({
+        error: {
+          code: 500,
+          message: 'Server error',
+          details: err.message || err
+        }
+      });
+    }
+    const creator = meta.metadata.creator;
+    if (creator.id.equals(user._id)) {
+      return next();
+    } else {
+      const readers = meta.metadata.readers;
+
+      if (readers && readers.length > 0) {
+        return _.forEach(readers, function(reader) {
+            const et = new ObjectId(reader);
+
+            if (et.equals(user._id)) {
+              return next();
+            }
+        });
+      }
+    }
+
+    return res.status(401).json({
+      error: {
+        code: 401,
+        message: 'Authorized error',
+        details: 'Do not have Authorized'
+      }
+    });
+  })
 };

@@ -22,6 +22,14 @@
           }
         }
       })
+      .state('shared-with-me', {
+        url: '/shared-with-me',
+        views: {
+          'root': {
+            templateUrl: '/views/files/shared-with-me'
+          }
+        }
+      })
       .state('folder', {
         url: '/folder/:folderId',
         views: {
