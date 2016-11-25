@@ -1,19 +1,36 @@
 doctype html
-html
+html(lang='en')
   head
-    meta(charset='utf-8')
-    meta(http-equiv='X-UA-Compatible', content='IE=edge')
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    meta(name='theme-color' content='#0064be')
-    title HUST - Files Sharing System
-    link(rel='shortcut icon', href='/favicon.ico')
-
-    body.ng-cloak
-        header.topbar.navbar
-            .container-fluid
-                a(href="#")
-            div.container
-                div
-                    h1 Not Found
-                div.text-center
-                    code.text-danger 404
+    
+    link(rel='stylesheet', href='/css/404.css')
+    title 404-Not Found
+  body
+    .wrapper.row2
+      #container.clear
+        // #######################################################################################################
+        // #######################################################################################################
+        // #######################################################################################################
+        // #######################################################################################################
+        section#fof.clear
+          // #######################################################################################################
+          .hgroup
+            h1
+              span
+                strong 4
+              span
+                strong 0
+              span
+                strong 4
+            h2
+              | Error ! 
+              span Page Not Found
+          p For Some Reason The Page You Requested Could Not Be Found On Our Server
+          p
+            a(href='javascript:history.go(-1)') « Go Back
+            |  / 
+            a(href='/home') Go Home »
+          // #######################################################################################################
+        // #######################################################################################################
+        // #######################################################################################################
+        // #######################################################################################################
+        // #######################################################################################################

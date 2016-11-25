@@ -33,12 +33,6 @@ exports.isAuthorized = (req, res, next) => {
       return next();
     }
 
-    return res.status(401).json({
-      error: {
-        code: 401,
-        message: 'Authorized error',
-        details: 'Do not have Authorized'
-      }
-    });
+    return res.render('404');
   })
 };

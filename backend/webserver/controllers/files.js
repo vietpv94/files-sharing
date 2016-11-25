@@ -161,7 +161,7 @@ function get(req, res) {
     if (!readStream) {
       if (req.accepts('html')) {
         res.status(404).end();
-        return res.render('404', { url: req.url });
+        return res.render('404');
       } else {
         return res.status(404).json({
           error: 404,
