@@ -26,18 +26,11 @@ exports.isAuthorized = (req, res, next) => {
     const creator = meta.metadata.creator;
     if (creator.id.equals(user._id)) {
       return next();
-    } else {
-      const readers = meta.metadata.readers;
+    }
+    const readers = meta.metadata.readers;
 
-      if (readers && readers.length > 0) {
-        return _.forEach(readers, function(reader) {
-            const et = new ObjectId(reader);
-
-            if (et.equals(user._id)) {
-              return next();
-            }
-        });
-      }
+    if (_.indexOf(readers, user._id.toString()) > - 1) {
+      return next();
     }
 
     return res.status(401).json({
