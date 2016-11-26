@@ -17,7 +17,8 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "jquery": "2.1.1",
+    "bootstrap": "~3.3.5",
     "angular": "1.3.20",
     "angular-route": "1.3.20",
     "angular-component": "https://github.com/toddmotto/angular-component.git#v0.1.3",
@@ -30,5 +31,10 @@
     "angular-cookies": "^1.5.8",
     "ng-file-upload": "^12.2.13",
     "lodash": "2.4.1"
+  },
+  "resolutions": {
+    "jquery": "2.1.1",
+    "angular": "1.3.20",
+    "bootstrap": "3.3.5"
   }
 }
