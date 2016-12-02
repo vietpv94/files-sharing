@@ -6,7 +6,6 @@ const lusca = require('lusca');
 const flash = require('express-flash');
 const path = require('path');
 const passport = require('passport');
-const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 const setupSession = require('./middleware/setup-session');

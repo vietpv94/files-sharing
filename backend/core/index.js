@@ -1,7 +1,9 @@
 'use strict';
 
+var mongo = require('./db/mongo')
+
 module.exports.init = function(callback) {
-  exports.db.mongo.init();
+  mongo.init();
   if (callback) {
     callback();
   }

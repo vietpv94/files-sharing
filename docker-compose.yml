@@ -1,0 +1,23 @@
+version: '2'
+services:
+  web:
+    image: dsp_app
+    env_file:
+      - ./.env.dev
+    environment:
+      - MONGODB_URI=mongodb://127.0.0.1:27017/files-sharing-dev
+      - MONGOLAB_URI=mongodb://127.0.0.1:27017/files-sharing-dev
+      - SESSION_SECRET=Your Session Secret goes here
+      - SENDGRID_USER=hslogin
+      - SENDGRID_PASSWORD=hspassword00
+      - GOOGLE_ID=161558723198-js6juos31nhmlva4tv681vvcp9rtsos2.apps.googleusercontent.com
+      - GOOGLE_SECRET=YU1xeVDX857BCzN6A8efeac_
+
+  lb:
+    image: dockercloud/haproxy
+    links:
+     - web
+    ports:
+     - '3000:3000'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

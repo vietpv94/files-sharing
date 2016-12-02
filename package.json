@@ -54,7 +54,9 @@
     "passport-local": "^1.0.0",
     "passport-oauth": "^1.0.0",
     "paypal-rest-sdk": "^1.6.9",
+    "redis": "^2.6.3",
     "request": "^2.74.0",
+    "response-time": "^2.3.2",
     "stripe": "^4.11.0",
     "trim": "0.0.1",
     "validator": "^6.0.0"
