@@ -42,3 +42,37 @@ npm install -g bower
 
 npm install
 ```
+
+## Start system ##
+
+You need at least 2 machines installed webserver
+
+Start webserver on each machine
+
+* Install nginx on one of them then start config nginx to load blancing
+
+
+```
+#!shell
+
+upstream node_servers {
+
+    server ip_web1:3000;
+    server ip_web2:3000 backup;
+    keepalive 8;
+}
+
+server {
+    listen 80;
+    server_name localhost;
+    location / {
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_pass http://node_servers;
+    }
+}
+
+```
