@@ -76,3 +76,29 @@ server {
 }
 
 ```
+
+* start Nginx and access to port 80.
+
+* Replica Set and data synchronous
+
+* Set up mongodb on 3 machines, 1 primary(master), 2 secondary(slaves)
+
+* start mongo by using this comand
+
+```
+#!shell
+
+sudo mongod bind_ip ip_machine --port 27017 --dbpath /absolute/path/to/db --logpath /absolute/path/to/log logappend=true nojournal = true --replSet "james" --smallfiles --oplogSize 50
+```
+
+* on machine you chosen to be master, access to mongodb 
+```
+#!shell
+mongo –host ip_of_the_machine
+
+>rs.initiate()
+
+>rs.add(“ip_of_secondary_node_1”)
+
+>rs.add(“ip_of_secondary_node_2”)
+```
