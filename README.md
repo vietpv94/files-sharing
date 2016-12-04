@@ -102,3 +102,11 @@ mongo –host ip_of_the_machine
 
 >rs.add(“ip_of_secondary_node_2”)
 ```
+* final access to slaves and access to mongodb
+
+
+```
+#!shell
+
+>rs.slaveOK()
+```
