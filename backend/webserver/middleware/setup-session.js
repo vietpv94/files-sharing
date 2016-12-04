@@ -16,7 +16,6 @@ function setupSession(session) {
       secret: process.env.SESSION_SECRET,
       store: new MongoStore({
         mongoose: mongoose,
-        url: process.env.MONGODB_URI || process.env.MONGOLAB_URI,
         autoReconnect: true
       })
     }));
