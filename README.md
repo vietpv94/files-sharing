@@ -7,7 +7,7 @@ Files Sharing is a open source project that express how Distributed system thing
 ```
 #!git
 
-git clone https://viet_pham@bitbucket.org/sugoiiiteam/files-sharing.git NAME_WORK_SPACE
+git clone https://github.com/vietpv94/files-sharing.git NAME_WORK_SPACE
 ```
 ## * Install and configurate MongoDB ##
 
