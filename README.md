@@ -11,11 +11,9 @@ git clone https://github.com/vietpv94/files-sharing.git NAME_WORK_SPACE
 ```
 ## * Install and configurate MongoDB ##
 
-You must install mongoDB. We suggest you to use mongoDB version 2.6.5.
+You must install mongoDB.
 ```
-echo 'deb http://downloads-distro.mongodb.org/repo/debian-sysvinit dist 10gen' | tee /etc/apt/sources.list.d/mongodb.list
-apt-get install -y mongodb-org=2.6.5 mongodb-org-server=2.6.5 mongodb-org-shell=2.6.5 mongodb-org-mongos=2.6.5 mongodb-org-tools=2.6.5
-service mongod start
+https://docs.mongodb.com/manual/tutorial/install-mongodb-enterprise-on-ubuntu/
 ```
 ## * Install node.js  ##
 We highly recommend that you use nvm to install a specific version of node.
