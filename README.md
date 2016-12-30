@@ -11,10 +11,10 @@ git clone https://github.com/vietpv94/files-sharing.git NAME_WORK_SPACE
 ```
 ## * Install and configurate MongoDB ##
 
-You must install mongoDB.
-```
+You must install mongoDB. follow the link below
+
 https://docs.mongodb.com/manual/tutorial/install-mongodb-enterprise-on-ubuntu/
-```
+
 ## * Install node.js  ##
 We highly recommend that you use nvm to install a specific version of node.
 
